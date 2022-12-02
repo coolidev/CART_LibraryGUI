@@ -25,7 +25,7 @@ export const PDFViewerADD: FC<PDFViewerProps> = ({ isOpen, onClose }) => {
   const classes = useStyles();
   const files = importAll(
     require['context']('../../../../public/static/pdf/add', false, /\.(pdf)$/)
-  );
+  )??null;
   const handleClose = () => onClose();
 
   return (

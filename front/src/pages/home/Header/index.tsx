@@ -393,7 +393,7 @@ const Header: FC<HeaderProps> = ({
                 className={classes.title}
                 style={{ color: theme.palette.text.primary }}
               >
-                CoSMOS <br />
+                CART <br />
               </Typography>
               <Divider className={classes.divider} />
               <Typography
@@ -402,7 +402,7 @@ const Header: FC<HeaderProps> = ({
                 className={classes.subTitle}
                 color="textPrimary"
               >
-                Commercial Systems for Mission Operations Suitability
+                EXAMPLE TEXT
               </Typography>
             </Link>
           </Box>

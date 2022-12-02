@@ -55,14 +55,14 @@ const HelpModal: FC<HelpModalProps> = ({ open, onOpen }) => {
       </Typography>
       <br />
       <Typography variant="subtitle1" align="center">
-        Have a question or need assistance using CoSMOS?
+        Have a question or need assistance using cart?
       </Typography>
       <br />
       <Typography align="center" variant="h6">
         Email us at:
         <br />
-        <Link href="mailto:cosmoshelp@teltrium.com">
-          CosmosHelp@teltrium.com
+        <Link href="mailto:test@test.com">
+          test@test.com
         </Link>
       </Typography>
       <Button

@@ -1,7 +1,7 @@
 export const INTROITEMS = [
     {
         title:
-            'Welcome to CoSMOS!',
+            'Welcome to Cart!',
         content:
             'NASA’s Space Communications and Navigation Program is working to transform communication services for NASA missions ' +
             'from NASA-owned to commercially-provided capabilities. <ul><li>Goal 1: Expand commercial direct to Earth services to 100% in 2023</li>' +

@@ -106,7 +106,7 @@ const Welcome: FC<WelcomeProps> = ({ onConfirm }) => {
         fullWidth
       >
         <DialogTitle disableTypography className={classes.title}>
-          <Typography variant="h6">Welcome to CoSMOS!</Typography>
+          <Typography variant="h6">Welcome to Cart!</Typography>
         </DialogTitle>
         <DialogContent
           dividers
@@ -121,14 +121,7 @@ const Welcome: FC<WelcomeProps> = ({ onConfirm }) => {
           >
             <Grid item md={6} xs={12}>
               <Typography variant="body1" style={{ marginTop: ((zoom<=1)?((window.screen.availHeight / zoom) * 0.02):0)}}>
-                Commercial Systems for Missions Operations Suitability (CoSMOS)
-                is designed to facilitate exploration of commercial system
-                capability and potential application to mission needs. <br /><br />
-                To get started, please create or load a project by selecting one
-                of the options to the right. This project will store all
-                configurations made, and associate them with your mission. Once
-                created, these projects may be accessed again at any time by
-                selecting them from the list to the right.
+                Sample Text
               </Typography>
             </Grid>
             <Grid item md={6} xs={12}>
