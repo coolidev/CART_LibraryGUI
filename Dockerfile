@@ -5,7 +5,7 @@ WORKDIR /usr/app
 COPY . .
 RUN npm install -f
 RUN npm run build
-RUN cd ../front
+WORKDIR "/testAPI"
 RUN npm install -f
 RUN npm run babel
 
