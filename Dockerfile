@@ -6,6 +6,7 @@ COPY . .
 RUN npm install -f
 RUN npm run build
 RUN cd ../front
+RUN npm install -f
 RUN npm run babel
 
 
