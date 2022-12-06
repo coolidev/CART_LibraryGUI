@@ -1,5 +1,6 @@
 import SvgIcon, { SvgIconProps } from '@material-ui/core/SvgIcon';
 import { Typography, IconButton } from '@material-ui/core';
+import { Input } from '@material-ui/icons';
 import {
   fade,
   withStyles,
@@ -11,6 +12,10 @@ import TreeItem, { TreeItemProps } from '@material-ui/lab/TreeItem';
 import Collapse from '@material-ui/core/Collapse';
 import { useSpring, animated } from 'react-spring'; // web.cjs is required for IE 11 support
 import { TransitionProps } from '@material-ui/core/transitions';
+import { Button } from 'devextreme-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 type StyledTreeItemProps = TreeItemProps & {
   labelText: string;
@@ -87,7 +92,7 @@ export const StyledTreeItem = withStyles((theme: Theme) =>
       borderLeft: `1px dashed ${fade(theme.palette.text.primary, 0.4)}`
     }
   })
-)((props: StyledTreeItemProps) => {
+)((props: StyledTreeItemProps & { relations?: string[] }) => {
   const {
     nodeId,
     labelText,
@@ -95,9 +100,18 @@ export const StyledTreeItem = withStyles((theme: Theme) =>
     isRowEvent,
     onClick,
     onRowClick,
+    relations,
     ...rest
   } = props;
   const classes = useStyles();
+
+  const iconElements = (relations || []).map((relation, index) => {
+    if (relation === 'input') {
+      return <FontAwesomeIcon key={index} icon={faSignInAlt as IconProp} />
+    } else {
+      return <FontAwesomeIcon key={index} icon={faSignOutAlt as IconProp} />
+    }
+  })
 
   return (
     <TreeItem
@@ -110,12 +124,14 @@ export const StyledTreeItem = withStyles((theme: Theme) =>
                 <div className={classes.root} onClick={() => onRowClick()}>
                   <Typography variant="body2" className={classes.labelText}>
                     {props.labelText}
+                    {iconElements}
                   </Typography>
                 </div>
               ) : (
                 <div className={classes.root}>
                   <Typography variant="body2" className={classes.labelText}>
                     {props.labelText}
+                    {iconElements}
                   </Typography>
                 </div>
               )}
@@ -124,6 +140,7 @@ export const StyledTreeItem = withStyles((theme: Theme) =>
             <div className={classes.root}>
               <Typography variant="body2" className={classes.labelText}>
                 {props.labelText}
+                {iconElements}
               </Typography>
               <IconButton
                 className={classes.btn}
