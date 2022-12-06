@@ -12,7 +12,7 @@ allFilters.set('missionLaunchYear', (compareVal : any) => {
     if (launchYear === -1) {
       return false;
     }
-    if(Number(networkObj.year) == NaN || Number(launchYear) == NaN) {
+    if(networkObj.year == null || launchYear == null) {
       return false;
     }
     return Number(networkObj.year) <= launchYear;
@@ -123,7 +123,7 @@ return (val : any) => {
     if (year == '') {
     year = '999999';
     }
-    if(Number(val.year) == NaN || Number(year) == NaN) {
+    if(val.year == null || year == null) {
     return false;
     }
     return Number(val.year) <= Number(year);
@@ -185,7 +185,7 @@ allFilters.set('minFrequency>', (compareVal : any) => {
       }
       if(isNaN(val.minFrequency)){
         val.minFrequency.split(',').forEach(value => {
-          if(Number(value) != NaN && Number(value) > Number(minFrequency)){
+          if((value) != null && Number(value) > Number(minFrequency)){
             isValid = true;
           }
         })
@@ -208,7 +208,7 @@ allFilters.set('minFrequency<', (compareVal : any) => {
       }
       if(isNaN(val.minFrequency)){
         val.minFrequency.split(',').forEach(value => {
-          if(Number(value) != NaN && Number(value) < Number(minFrequency)){
+          if((value) != null && Number(value) < Number(minFrequency)){
             isValid = true;
           }
         })
@@ -231,7 +231,7 @@ allFilters.set('minFrequency=', (compareVal : any) => {
       }
       if(isNaN(val.minFrequency)){
         val.minFrequency.split(',').forEach(value => {
-          if(Number(value) != NaN && Number(value) == Number(minFrequency)){
+          if((value) != null && Number(value) == Number(minFrequency)){
             isValid = true;
           }
         })
@@ -254,7 +254,7 @@ return (val : any) => {
     }
     if(isNaN(val.minFrequency)){
       val.minFrequency.split(',').forEach(value => {
-        if(Number(value) != NaN && Number(value) >= Number(minFrequency)){
+        if((value) != null && Number(value) >= Number(minFrequency)){
           isValid = true;
         }
       })
@@ -277,7 +277,7 @@ allFilters.set('minFrequency<=', (compareVal : any) => {
       }
       if(isNaN(val.minFrequency)){
         val.minFrequency.split(',').forEach(value => {
-          if(Number(value) != NaN && Number(value) <= Number(minFrequency)){
+          if((value) != null && Number(value) <= Number(minFrequency)){
             isValid = true;
           }
         })
@@ -302,7 +302,7 @@ allFilters.set('maxFrequency<', (compareVal : any) => {
       }
       if(isNaN(val.minFrequency)){
         val.maxFrequency.split(',').forEach(value => {
-          if(Number(value) != NaN && Number(value) < Number(maxFrequency)){
+          if((value) != null && Number(value) < Number(maxFrequency)){
             isValid = true;
           }
         })
@@ -326,7 +326,7 @@ allFilters.set('maxFrequency>', (compareVal : any) => {
       }
       if(isNaN(val.minFrequency)){
         val.maxFrequency.split(',').forEach(value => {
-          if(Number(value) != NaN && Number(value) > Number(maxFrequency)){
+          if((value) != null && Number(value) > Number(maxFrequency)){
             isValid = true;
           }
         })
@@ -350,7 +350,7 @@ allFilters.set('maxFrequency=', (compareVal : any) => {
       }
       if(isNaN(val.minFrequency)){
         val.maxFrequency.split(',').forEach(value => {
-          if(Number(value) != NaN && Number(value) == Number(maxFrequency)){
+          if((value) != null && Number(value) == Number(maxFrequency)){
             isValid = true;
           }
         })
@@ -374,7 +374,7 @@ return (val : any) => {
     }
     if(isNaN(val.minFrequency)){
       val.maxFrequency.split(',').forEach(value => {
-        if(Number(value) != NaN && Number(value) >= Number(maxFrequency)){
+        if((value) != null && Number(value) >= Number(maxFrequency)){
           isValid = true;
         }
       })
@@ -398,7 +398,7 @@ allFilters.set('maxFrequency<=', (compareVal : any) => {
       }
       if(isNaN(val.minFrequency)){
         val.maxFrequency.split(',').forEach(value => {
-          if(Number(value) != NaN && Number(value) <= Number(maxFrequency)){
+          if((value) != null && Number(value) <= Number(maxFrequency)){
             isValid = true;
           }
         })
@@ -425,11 +425,11 @@ return (val : any) => {
     if (sglGt == '') {
       return true;
     }
-    if(Number(sglGt) == NaN) {
+    if((sglGt) == null) {
     return false;
     }
     val.sglGt.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) < Number(sglGt)){
+      if((value) != null && Number(value) < Number(sglGt)){
         isValid = true;
       }
     })
@@ -450,11 +450,11 @@ return (val : any) => {
     if (sglGt == '') {
       return true;
     }
-    if(Number(sglGt) == NaN) {
+    if((sglGt) == null) {
     return false;
     }
     val.sglGt.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) > Number(sglGt)){
+      if((value) != null && Number(value) > Number(sglGt)){
         isValid = true;
       }
     })
@@ -475,11 +475,11 @@ return (val : any) => {
     if (sglGt == '') {
       return true;
     }
-    if(Number(sglGt) == NaN) {
+    if((sglGt) == null) {
     return false;
     }
     val.sglGt.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) <= Number(sglGt)){
+      if((value) != null && Number(value) <= Number(sglGt)){
         isValid = true;
       }
     })
@@ -500,11 +500,11 @@ return (val : any) => {
     if (sglGt == '') {
       return true;
     }
-    if(Number(sglGt) == NaN) {
+    if((sglGt) == null) {
     return false;
     }
     val.sglGt.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) >= Number(sglGt)){
+      if((value) != null && Number(value) >= Number(sglGt)){
         isValid = true;
       }
     })
@@ -526,11 +526,11 @@ return (val : any) => {
       return true;
     }
     // console.log("year: " + year + " and val " + val.year);
-    if(Number(sglGt) == NaN) {
+    if((sglGt) == null) {
     return false;
     }
     val.sglGt.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) == Number(sglGt)){
+      if((value) != null && Number(value) == Number(sglGt)){
         isValid = true;
       }
     })
@@ -554,11 +554,11 @@ return (val : any) => {
     if (sslGt == '') {
       return true;
     }
-    if(Number(sslGt) == NaN) {
+    if((sslGt) == null) {
     return false;
     }
     val.sslGt.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) < Number(sslGt)){
+      if((value) != null && Number(value) < Number(sslGt)){
         isValid = true;
       }
     })
@@ -579,11 +579,11 @@ return (val : any) => {
     if (sslGt == '') {
       return true;
     }
-    if(Number(sslGt) == NaN) {
+    if((sslGt) == null) {
     return false;
     }
     val.sslGt.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) > Number(sslGt)){
+      if((value) != null && Number(value) > Number(sslGt)){
         isValid = true;
       }
     })
@@ -604,11 +604,11 @@ return (val : any) => {
     if (sslGt == '') {
       return true;
     }
-    if(Number(sslGt) == NaN) {
+    if((sslGt) == null) {
     return false;
     }
     val.sslGt.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) <= Number(sslGt)){
+      if((value) != null && Number(value) <= Number(sslGt)){
         isValid = true;
       }
     })
@@ -629,11 +629,11 @@ return (val : any) => {
     if (sslGt == '') {
       return true;
     }
-    if(Number(sslGt) == NaN) {
+    if((sslGt) == null) {
     return false;
     }
     val.sslGt.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) >= Number(sslGt)){
+      if((value) != null && Number(value) >= Number(sslGt)){
         isValid = true;
       }
     })
@@ -655,11 +655,11 @@ return (val : any) => {
       return true;
     }
     // console.log("year: " + year + " and val " + val.year);
-    if(Number(sslGt) == NaN) {
+    if((sslGt) == null) {
     return false;
     }
     val.sslGt.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) == Number(sslGt)){
+      if((value) != null && Number(value) == Number(sslGt)){
         isValid = true;
       }
     })
@@ -682,11 +682,11 @@ return (val : any) => {
     if (sslEirp == '') {
       return true;
     }
-    if(Number(sslEirp) == NaN) {
+    if((sslEirp) == null) {
     return false;
     }
     val.sslEirp.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) < Number(sslEirp)){
+      if((value) != null && Number(value) < Number(sslEirp)){
         isValid = true;
       }
     })
@@ -707,11 +707,11 @@ return (val : any) => {
     if (sslEirp == '') {
       return true;
     }
-    if(Number(sslEirp) == NaN) {
+    if((sslEirp) == null) {
     return false;
     }
     val.sslEirp.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) > Number(sslEirp)){
+      if((value) != null && Number(value) > Number(sslEirp)){
         isValid = true;
       }
     })
@@ -732,11 +732,11 @@ return (val : any) => {
     if (sslEirp == '') {
       return true;
     }
-    if(Number(sslEirp) == NaN) {
+    if((sslEirp) == null) {
     return false;
     }
     val.sslEirp.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) <= Number(sslEirp)){
+      if((value) != null && Number(value) <= Number(sslEirp)){
         isValid = true;
       }
     })
@@ -757,11 +757,11 @@ return (val : any) => {
     if (sslEirp == '') {
       return true;
     }
-    if(Number(sslEirp) == NaN) {
+    if((sslEirp) == null) {
     return false;
     }
     val.sslEirp.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) >= Number(sslEirp)){
+      if((value) != null && Number(value) >= Number(sslEirp)){
         isValid = true;
       }
     })
@@ -783,11 +783,11 @@ return (val : any) => {
       return true;
     }
     // console.log("year: " + year + " and val " + val.year);
-    if(Number(sslEirp) == NaN) {
+    if((sslEirp) == null) {
     return false;
     }
     val.sslEirp.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) == Number(sslEirp)){
+      if((value) != null && Number(value) == Number(sslEirp)){
         isValid = true;
       }
     })
@@ -810,11 +810,11 @@ return (val : any) => {
     if (sglEirp == '') {
       return true;
     }
-    if(Number(sglEirp) == NaN) {
+    if((sglEirp) == null) {
     return false;
     }
     val.sglEirp.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) < Number(sglEirp)){
+      if((value) != null && Number(value) < Number(sglEirp)){
         isValid = true;
       }
     })
@@ -835,11 +835,11 @@ return (val : any) => {
     if (sglEirp == '') {
       return true;
     }
-    if(Number(sglEirp) == NaN) {
+    if((sglEirp) == null) {
     return false;
     }
     val.sglEirp.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) > Number(sglEirp)){
+      if((value) != null && Number(value) > Number(sglEirp)){
         isValid = true;
       }
     })
@@ -860,11 +860,11 @@ return (val : any) => {
     if (sglEirp == '') {
       return true;
     }
-    if(Number(sglEirp) == NaN) {
+    if((sglEirp) == null) {
     return false;
     }
     val.sglEirp.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) <= Number(sglEirp)){
+      if((value) != null && Number(value) <= Number(sglEirp)){
         isValid = true;
       }
     })
@@ -885,11 +885,11 @@ return (val : any) => {
     if (sglEirp == '') {
       return true;
     }
-    if(Number(sglEirp) == NaN) {
+    if((sglEirp) == null) {
     return false;
     }
     val.sglEirp.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) >= Number(sglEirp)){
+      if((value) != null && Number(value) >= Number(sglEirp)){
         isValid = true;
       }
     })
@@ -911,11 +911,11 @@ return (val : any) => {
       return true;
     }
     // console.log("year: " + year + " and val " + val.year);
-    if(Number(sglEirp) == NaN) {
+    if((sglEirp) == null) {
     return false;
     }
     val.sglEirp.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) == Number(sglEirp)){
+      if((value) != null && Number(value) == Number(sglEirp)){
         isValid = true;
       }
     })
@@ -1107,11 +1107,11 @@ return (val : any) => {
     if (eirp == '') {
       return true;
     }
-    if(Number(eirp) == NaN) {
+    if((eirp) == null) {
     return false;
     }
     val.eirpValues.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) < Number(eirp)){
+      if((value) != null && Number(value) < Number(eirp)){
         isValid = true;
       }
     })
@@ -1132,11 +1132,11 @@ return (val : any) => {
     if (eirp == '') {
       return true;
     }
-    if(Number(eirp) == NaN) {
+    if((eirp) == null) {
     return false;
     }
     val.eirpValues.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) > Number(eirp)){
+      if((value) != null && Number(value) > Number(eirp)){
         isValid = true;
       }
     })
@@ -1157,11 +1157,11 @@ return (val : any) => {
     if (eirp == '') {
       return true;
     }
-    if(Number(eirp) == NaN) {
+    if((eirp) == null) {
     return false;
     }
     val.eirpValues.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) <= Number(eirp)){
+      if((value) != null && Number(value) <= Number(eirp)){
         isValid = true;
       }
     })
@@ -1182,11 +1182,11 @@ return (val : any) => {
     if (eirp == '') {
       return true;
     }
-    if(Number(eirp) == NaN) {
+    if((eirp) == null) {
     return false;
     }
     val.eirpValues.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) >= Number(eirp)){
+      if((value) != null && Number(value) >= Number(eirp)){
         isValid = true;
       }
     })
@@ -1208,11 +1208,11 @@ return (val : any) => {
       return true;
     }
     // console.log("year: " + year + " and val " + val.year);
-    if(Number(eirp) == NaN) {
+    if((eirp) == null) {
     return false;
     }
     val.eirpValues.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) == Number(eirp)){
+      if((value) != null && Number(value) == Number(eirp)){
         isValid = true;
       }
     })
@@ -1235,11 +1235,11 @@ return (val : any) => {
     if (antennaSize == '') {
       return true;
     }
-    if(Number(antennaSize) == NaN) {
+    if((antennaSize) == null) {
     return false;
     }
     val.antennaSize.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) < Number(antennaSize)){
+      if((value) != null && Number(value) < Number(antennaSize)){
         isValid = true;
       }
     })
@@ -1260,11 +1260,11 @@ return (val : any) => {
     if (antennaSize == '') {
       return true;
     }
-    if(Number(antennaSize) == NaN) {
+    if((antennaSize) == null) {
     return false;
     }
     val.antennaSize.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) > Number(antennaSize)){
+      if((value) != null && Number(value) > Number(antennaSize)){
         isValid = true;
       }
     })
@@ -1285,11 +1285,11 @@ return (val : any) => {
     if (antennaSize == '') {
       return true;
     }
-    if(Number(antennaSize) == NaN) {
+    if((antennaSize) == null) {
     return false;
     }
     val.antennaSize.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) <= Number(antennaSize)){
+      if((value) != null && Number(value) <= Number(antennaSize)){
         isValid = true;
       }
     })
@@ -1310,11 +1310,11 @@ return (val : any) => {
     if (antennaSize == '') {
       return true;
     }
-    if(Number(antennaSize) == NaN) {
+    if((antennaSize) == null) {
     return false;
     }
     val.antennaSize.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) >= Number(antennaSize)){
+      if((value) != null && Number(value) >= Number(antennaSize)){
         isValid = true;
       }
     })
@@ -1336,11 +1336,11 @@ return (val : any) => {
       return true;
     }
     // console.log("year: " + year + " and val " + val.year);
-    if(Number(antennaSize) == NaN) {
+    if((antennaSize) == null) {
     return false;
     }
     val.antennaSize.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) == Number(antennaSize)){
+      if((value) != null && Number(value) == Number(antennaSize)){
         isValid = true;
       }
     })
@@ -1363,11 +1363,11 @@ return (val : any) => {
     if (antennaGain == '') {
       return true;
     }
-    if(Number(antennaGain) == NaN) {
+    if((antennaGain) == null) {
     return false;
     }
     val.antennaGain.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) < Number(antennaGain)){
+      if((value) != null && Number(value) < Number(antennaGain)){
         isValid = true;
       }
     })
@@ -1388,11 +1388,11 @@ return (val : any) => {
     if (antennaGain == '') {
       return true;
     }
-    if(Number(antennaGain) == NaN) {
+    if((antennaGain) == null) {
     return false;
     }
     val.antennaGain.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) > Number(antennaGain)){
+      if((value) != null && Number(value) > Number(antennaGain)){
         isValid = true;
       }
     })
@@ -1413,11 +1413,11 @@ return (val : any) => {
     if (antennaGain == '') {
       return true;
     }
-    if(Number(antennaGain) == NaN) {
+    if((antennaGain) == null) {
     return false;
     }
     val.antennaGain.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) <= Number(antennaGain)){
+      if((value) != null && Number(value) <= Number(antennaGain)){
         isValid = true;
       }
     })
@@ -1438,11 +1438,11 @@ return (val : any) => {
     if (antennaGain == '') {
       return true;
     }
-    if(Number(antennaGain) == NaN) {
+    if((antennaGain) == null) {
     return false;
     }
     val.antennaGain.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) >= Number(antennaGain)){
+      if((value) != null && Number(value) >= Number(antennaGain)){
         isValid = true;
       }
     })
@@ -1464,11 +1464,11 @@ return (val : any) => {
       return true;
     }
     // console.log("year: " + year + " and val " + val.year);
-    if(Number(antennaGain) == NaN) {
+    if((antennaGain) == null) {
     return false;
     }
     val.antennaGain.split(',').forEach(value => {
-      if(Number(value) != NaN && Number(value) == Number(antennaGain)){
+      if((value) != null && Number(value) == Number(antennaGain)){
         isValid = true;
       }
     })
@@ -1491,11 +1491,11 @@ allFilters.set('GT<', (compareVal : any) => {
       if (gt == '') {
         return true;
       }
-      if(Number(gt) == NaN) {
+      if((gt) == null) {
       return false;
       }
       val.gtValues.split(',').forEach(value => {
-        if(Number(value) != NaN && Number(value) < Number(gt)){
+        if((value) != null && Number(value) < Number(gt)){
           isValid = true;
         }
       })
@@ -1516,11 +1516,11 @@ allFilters.set('GT>', (compareVal : any) => {
       if (gt == '') {
         return true;
       }
-      if(Number(gt) == NaN) {
+      if((gt) == null) {
       return false;
       }
       val.gtValues.split(',').forEach(value => {
-        if(Number(value) != NaN && Number(value) > Number(gt)){
+        if((value) != null && Number(value) > Number(gt)){
           isValid = true;
         }
       })
@@ -1541,11 +1541,11 @@ allFilters.set('GT<=', (compareVal : any) => {
       if (gt == '') {
         return true;
       }
-      if(Number(gt) == NaN) {
+      if((gt) == null) {
       return false;
       }
       val.gtValues.split(',').forEach(value => {
-        if(Number(value) != NaN && Number(value) <= Number(gt)){
+        if((value) != null && Number(value) <= Number(gt)){
           isValid = true;
         }
       })
@@ -1566,11 +1566,11 @@ allFilters.set('GT>=', (compareVal : any) => {
       if (gt == '') {
         return true;
       }
-      if(Number(gt) == NaN) {
+      if((gt) == null) {
       return false;
       }
       val.gtValues.split(',').forEach(value => {
-        if(Number(value) != NaN && Number(value) >= Number(gt)){
+        if((value) != null && Number(value) >= Number(gt)){
           isValid = true;
         }
       })
@@ -1592,11 +1592,11 @@ allFilters.set('GT=', (compareVal : any) => {
         return true;
       }
       // console.log("year: " + year + " and val " + val.year);
-      if(Number(gt) == NaN) {
+      if((gt) == null) {
       return false;
       }
       val.gtValues.split(',').forEach(value => {
-        if(Number(value) != NaN && Number(value) == Number(gt)){
+        if((value) != null && Number(value) == Number(gt)){
           isValid = true;
         }
       })

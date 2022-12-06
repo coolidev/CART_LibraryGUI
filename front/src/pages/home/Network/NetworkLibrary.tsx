@@ -31,6 +31,7 @@ import { SearchOption } from 'src/types/details';
 import { Filter, Filterer } from 'src/utils/filterer';
 import { THEMES } from 'src/utils/constants/general';
 import { NoEncryption } from '@material-ui/icons';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 interface NetworkLibraryProps {
   state: State;
@@ -605,7 +606,7 @@ const NetworkLibrary: FC<NetworkLibraryProps> = ({
           headerCellRender={() => (
             <div data-filter={true} style={{padding:0,margin:0}}>
             <FontAwesomeIcon
-              icon={faFilter}
+              icon={faFilter as IconProp}
               style={{
                 color: theme.palette.primary.main
               }}

@@ -36,13 +36,13 @@ export const PDFViewerADD: FC<PDFViewerProps> = ({ isOpen, onClose }) => {
         onClose={handleClose}
         className={{ paper: classes.dialog }}
       >
-        <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.4.456/build/pdf.worker.min.js">
+        <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.4.456/build/pdf.worker.min.js" />
           <Viewer
             fileUrl={files[0]?.default}
             layout={Layout}
             defaultScale={1.5}
           />
-        </Worker>
+        {/* </Worker> */}
       </DialogBox>
     </div>
   );
@@ -63,13 +63,13 @@ export const PDFViewerGuide: FC<PDFViewerProps> = ({ isOpen, onClose }) => {
         onClose={handleClose}
         className={{ paper: classes.dialog }}
       >
-        <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.4.456/build/pdf.worker.min.js">
+        <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.4.456/build/pdf.worker.min.js" />
           <Viewer
             fileUrl={files[0]?.default}
             layout={Layout}
             defaultScale={1.5}
           />
-        </Worker>
+        {/* </Worker> */}
       </DialogBox>
     </div>
   );
