@@ -20,7 +20,7 @@ export function App(api: Api): Express {
   app.use(cors());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
-  app.use(express.static("./build"));
+  app.use(express.static("../front/build"));
   app.use("/api/v0", api.router);
 
   app.get("/", (req: Request, res: Response) => {
