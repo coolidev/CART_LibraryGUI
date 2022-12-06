@@ -107,9 +107,9 @@ export const StyledTreeItem = withStyles((theme: Theme) =>
 
   const iconElements = (relations || []).map((relation, index) => {
     if (relation === 'input') {
-      return <FontAwesomeIcon key={index} icon={faSignInAlt as IconProp} />
+      return <Button icon={"import"}></Button>
     } else {
-      return <FontAwesomeIcon key={index} icon={faSignOutAlt as IconProp} />
+      return <Button icon={"export"}></Button>
     }
   })
 
