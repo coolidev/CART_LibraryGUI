@@ -11,7 +11,8 @@ import {
   MenuItem,
   Typography,
   makeStyles,
-  Theme
+  Theme,
+  Tab
 } from '@material-ui/core';
 import TreeView from '@material-ui/lab/TreeView';
 import {
@@ -28,6 +29,9 @@ import AddStation from './AddStation';
 import AddAntenna from './AddAntenna';
 import AddBand from './AddBand';
 import AddModDemod from './AddModDemod';
+import { TabPanel, Tabs } from 'devextreme-react';
+import ConnectivityPanel from './ConnectivityPanel';
+import axios from 'src/utils/axios';
 
 interface ManagerProps {
   state: State;
@@ -40,6 +44,28 @@ interface NodeMenu {
   nodeId: string;
   add: string;
   remove: string;
+}
+
+export interface ConnectivitySource {
+  id: number;
+  platform_1: string;
+  platform_1_id: number;
+  antenna_1: string | null;
+  antenna_1_id: number | null;
+  rfFrontEnd_1: string | null;
+  rfFrontEnd_1_id: number | null;
+  modDemod_1: string | null;
+  modDemod_1_id: number | null;
+  platform_2: string | null;
+  platform_2_id: number | null;
+  antenna_2: string | null;
+  antenna_2_id: number | null;
+  rfFrontEnd_2: string | null;
+  rfFrontEnd_2_id: number | null;
+  modDemod_2: string | null;
+  modDemod_2_id: number | null;
+  isconnected: boolean;
+  down: boolean;
 }
 
 const initialMenu: NodeMenu = {
@@ -124,12 +150,26 @@ const Manager: FC<ManagerProps> = ({
   const [source, setSource] = useState<SubSection[]>([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [menu, setMenu] = useState<NodeMenu>(initialMenu);
+  const [currentPanelTab, setCurrentPanelTab] = useState<number>(0);
+  const [connectivitySource, setConnectivitySource] = useState<ConnectivitySource[]>([]);
   const { isEngineer } = useSelector(state => state.user);
 
   useEffect(() => {
     setSelected(new Array(dataSource.detail.system_value[0]?.section_name??null));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const params = { id: 1 }; // update with the id of the planet
+      const response = await axios.post<ConnectivitySource[]>('/requestRelationship', params);
+
+      if (response.data) {
+        setConnectivitySource(response.data)
+      }
+    };
+    fetchData();
+  }, [])
 
   useEffect(() => {
     const values = results.map((item) => item.section_name);
@@ -244,7 +284,7 @@ const Manager: FC<ManagerProps> = ({
     return uniqueKeys.map((item, idx) => {
       const suffix = parent ? `${parent}` : '';
       const nodeId = item ? suffix + `---${item}` : suffix;
-      const data =
+      const data: any =
         index !== 0
           ? result.filter(
               (el) => el[key] && !banned.includes(el[key]) && el[key] === item
@@ -255,6 +295,21 @@ const Manager: FC<ManagerProps> = ({
       const isValid = index === 0 || data.length > 0;
       const treelabel = index === 3 ? `${item}` : index === 2 ? `${item}`  : index === 0 ? nodeId : item;
 
+      const connectIcons = []
+
+      if (data.length > 0) {
+        const treeLink = [data[0].platform_Id, data[0].antenna_Id, data[0].rfFrontEnd_Id, data[0].modDemod_Id].join('_').replace(/^_+|_+$/gm,'')
+        const resources = connectivitySource.filter((source) => {
+          return [source.platform_1_id, source.antenna_1_id, source.rfFrontEnd_1_id, source.modDemod_1_id].join('_').replace(/^_+|_+$/gm,'') === treeLink && source.isconnected
+        })
+        if (resources.length > 0) {
+          if (resources.filter(source => source.down).length > 0) {
+            connectIcons.push('output')
+          } else {
+            connectIcons.push('input')
+          }
+        }
+      }
       return isValid ? (
         <div key={idx} id={depths[index] ?? ''}>
           <StyledTreeItem
@@ -262,6 +317,7 @@ const Manager: FC<ManagerProps> = ({
             labelText={treelabel}
             labelIcon={isEngineer ? MoreVertIcon : null}
             onClick={(event) => handleMenu(event, nodeId)}
+            relations={connectIcons}
           >
             {depths[index + 1] &&
               nextValid &&
@@ -271,6 +327,24 @@ const Manager: FC<ManagerProps> = ({
       ) : null;
     });
   };
+
+  const handlePanelChange = (args: any) => {
+    if (args.name === 'selectedIndex' && args.value !== null && args.value !== -1) {
+      setCurrentPanelTab(args.value)
+    }
+  }
+
+  const updateConnectivity = (id: number) => {
+    const fetchData = async () => {
+      const params = { id }; // update with the id of the planet
+      const response = await axios.post<ConnectivitySource[]>('/updateConnectivity', params);
+
+      if (response.data) {
+        // setConnectivitySource(response.data)
+      }
+    };
+    fetchData();
+  }
 
   return (
     <Grid item md={12} className={classes.root}>
@@ -343,12 +417,33 @@ const Manager: FC<ManagerProps> = ({
               ))}
             </Breadcrumbs>
             <Box mt={3}>
-              <DataTable
-                // @ts-ignore
-                id={dataSource.id}
-                isAdmin={dataSource.isAdmin}
-                source={source}
+              <Tabs
+                dataSource={[
+                  {
+                    text: 'Attributes'
+                  },
+                  {
+                    text: 'Connectivity'
+                  }]}
+                selectedIndex={currentPanelTab}
+                onOptionChanged={handlePanelChange}
               />
+              {currentPanelTab === 0 && (
+                <DataTable
+                  // @ts-ignore
+                  id={dataSource.id}
+                  isAdmin={dataSource.isAdmin}
+                  source={source}
+                />
+              )}
+              {currentPanelTab === 1 && (
+                <ConnectivityPanel
+                  id={dataSource.id}
+                  selected={selected}
+                  source={connectivitySource}
+                  updateConnectivity={updateConnectivity}
+                />
+              )}
               {/* {(source[0] != null) && (source[0].sub_key === "antenna_frequency")
                   ?<Typography display="block" align="right" variant="caption" className="classes.note"><br></br>{DTE_NOTES}</Typography>
                   :null

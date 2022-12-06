@@ -606,13 +606,13 @@ const CompareTable: FC<CompareTableProps> = ({
                                       disabled={row.length === 0}
                                       orientation="horizontal"
                                       onItemClick={(param) => {
-                                        if (param.itemData.id === '2') {
+                                        if (param.itemData['id'] === '2') {
                                           handleCheckRow(
                                             groupIdx,
                                             checked,
                                             paramName
                                           );
-                                        } else if (param.itemData.id === '1') {
+                                        } else if (param.itemData['id'] === '1') {
                                           handleCompareLinePlot(paramName.toString());
                                         }
                                       }

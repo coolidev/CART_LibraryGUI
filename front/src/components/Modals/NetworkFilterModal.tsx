@@ -265,7 +265,7 @@ const NetworkFilterModal: FC<NetworkFilterModalProps> = ({
               onChange={(e) => {
                 const { name, value } = e.target;
                 let x = Number(value);
-                if(Number(value) !== NaN){
+                if((value) !== null){
                   if(filterer.getFilters().has(name)) {
                     filterer.removeFilter(name);
                   }
@@ -275,7 +275,7 @@ const NetworkFilterModal: FC<NetworkFilterModalProps> = ({
                   };
                 
                 filterer.addFilter(name, newFilter);
-                filters.operationalYear = parseInt(value) != NaN? value: filters.operationalYear;
+                filters.operationalYear = (value) != null? value: filters.operationalYear;
                 onFilterChange();
                 } 
                 if(value === ''){

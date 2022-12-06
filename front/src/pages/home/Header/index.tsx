@@ -49,6 +49,7 @@ import { PerformancePanel, RelayCharacteristics } from 'src/types/evaluation';
 import { updateResults } from 'src/slices/results';
 import { getValue } from 'src/algorithms/regressions';
 import { parseComma } from 'src/utils/util';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 interface HeaderProps {
   state: State;
@@ -454,7 +455,7 @@ const Header: FC<HeaderProps> = ({
                     anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                   >
                     <FontAwesomeIcon
-                      icon={faThumbtack}
+                      icon={faThumbtack as IconProp}
                       style={{ color: '#e14748' }}
                       size="sm"
                       className={

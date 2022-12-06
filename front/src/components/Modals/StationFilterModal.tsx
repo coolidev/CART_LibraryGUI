@@ -292,7 +292,7 @@ const StationFilterModal: FC<StationFilterModalProps> = ({
                     return Number(val.startYear) <= Number(value);
                   }
                 };
-                  filters.operationalYear = parseInt(value) != NaN? value: filters.operationalYear;
+                  filters.operationalYear = (value) != null? value: filters.operationalYear;
                   filterer.addFilter(name, newFilter);
                 onFilterChange();
                   
