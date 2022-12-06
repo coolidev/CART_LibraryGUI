@@ -24,7 +24,7 @@ export function App(api: Api): Express {
   app.use("/api/v0", api.router);
 
   app.get("/", (req: Request, res: Response) => {
-    res.sendFile(path.resolve("./build/" + "index.html"));
+    res.sendFile(path.resolve("../front/build/" + "index.html"));
   });
 
   return app;
