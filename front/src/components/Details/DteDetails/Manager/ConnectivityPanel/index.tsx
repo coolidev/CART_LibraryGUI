@@ -33,11 +33,10 @@ const ConnectivityPanel: FC<ConnectivityPanelProps> = ({ id, selected, source, u
   }, [selected])
 
   // useEffect(() => {
-  //   console.log(outputTo)
+  //   console.log(outputTo.map(one => one.isconnected))
   // }, [outputTo])
 
   const handleConnectivity = (id: number, indexInList: number) => {
-    // console.log('handleCOnnectivity', id, indexInList)
     let newConnectivity = outputTo
     newConnectivity[indexInList].isconnected = !newConnectivity[indexInList].isconnected
     setOutputTo([...newConnectivity])
@@ -51,7 +50,7 @@ const ConnectivityPanel: FC<ConnectivityPanelProps> = ({ id, selected, source, u
         <Grid style={{ height: '300px', backgroundColor: "white", border: 'solid 1px blue', overflowY: "scroll", padding: "1rem" }}>
           {outputTo.map((source, index) => (
             <div 
-              key={index}
+              key={source.id + '_' + index}
               className="dx-field"
             >
               <CheckBox
