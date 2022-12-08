@@ -152,6 +152,7 @@ const Manager: FC<ManagerProps> = ({
   const [menu, setMenu] = useState<NodeMenu>(initialMenu);
   const [currentPanelTab, setCurrentPanelTab] = useState<number>(0);
   const [connectivitySource, setConnectivitySource] = useState<ConnectivitySource[]>([]);
+  const [connectionChangeFlag, setConnectionChangeFlag] = useState<boolean>(false);
   const { isEngineer } = useSelector(state => state.user);
 
   useEffect(() => {
@@ -339,6 +340,8 @@ const Manager: FC<ManagerProps> = ({
       const params = { id }; // update with the id of the planet
       const response = await axios.post<ConnectivitySource[]>('/updateConnectivity', params);
 
+      setConnectionChangeFlag(!connectionChangeFlag)
+
       if (response.data) {
         // setConnectivitySource(response.data)
       }
@@ -360,7 +363,7 @@ const Manager: FC<ManagerProps> = ({
               onNodeSelect={handleSelect}
               onNodeToggle={handleToggle}
             >
-              {results.map((result: Section, i: number) =>
+              {(connectionChangeFlag || !connectionChangeFlag) && results.map((result: Section, i: number) =>
                 renderTree(depths[0], result.section_value, result.section_name)
               )}
               {isEngineer && (
