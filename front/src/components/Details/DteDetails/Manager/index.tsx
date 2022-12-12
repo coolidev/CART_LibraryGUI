@@ -123,6 +123,15 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   note: {
     textAlign: 'right'
+  },
+  tabPanel: {
+    display: 'block',
+    '& .dx-item.dx-tab-selected': {
+      color: 'inherit'
+    },
+    '& .dx-tab.dx-tab-selected::before': {
+      backgroundColor: 'rgba(0,0,0,.54)'
+    }
   }
 }));
 
@@ -272,6 +281,18 @@ const Manager: FC<ManagerProps> = ({
     setSelected(selected.filter((item, i) => i <= idx));
   };
 
+  const getTreeID = (source) => {
+    return [source.platform_Id, source.antenna_Id, source.rfFrontEnd_Id, source.modDemod_Id].join('_').replace(/^_+|_+$/gm,'')
+  }
+
+  const getFromID = (source: ConnectivitySource) => {
+    return [source.platform_1_id, source.antenna_1_id, source.rfFrontEnd_1_id, source.modDemod_1_id].join('_').replace(/^_+|_+$/gm,'')
+  }
+
+  const getToID = (source: ConnectivitySource) => {
+    return [source.platform_2_id, source.antenna_2_id, source.rfFrontEnd_2_id, source.modDemod_2_id].join('_').replace(/^_+|_+$/gm,'')
+  }
+
   const renderTree = (key: string, result: SubSection[], parent?: string) => {
     const index = depths.indexOf(key);
     const keys = _.uniq(
@@ -299,16 +320,28 @@ const Manager: FC<ManagerProps> = ({
       const connectIcons = []
 
       if (data.length > 0) {
-        const treeLink = [data[0].platform_Id, data[0].antenna_Id, data[0].rfFrontEnd_Id, data[0].modDemod_Id].join('_').replace(/^_+|_+$/gm,'')
+        const treeLink = getTreeID(data[0])
         const resources = connectivitySource.filter((source) => {
-          return [source.platform_1_id, source.antenna_1_id, source.rfFrontEnd_1_id, source.modDemod_1_id].join('_').replace(/^_+|_+$/gm,'') === treeLink && source.isconnected
+          return (getFromID(source) === treeLink || getToID(source) === treeLink) && source.isconnected
         })
         if (resources.length > 0) {
-          if (resources.filter(source => source.down).length > 0) {
-            connectIcons.push('output')
-          } else {
-            connectIcons.push('input')
-          }
+          resources.map(source => {
+            if (source.down) {
+              if (getFromID(source) === treeLink) {
+                connectIcons.push(`down_output_${getFromID(source)}`)
+              }
+              if (getToID(source) === treeLink) {
+                connectIcons.push(`down_input_${getToID(source)}`)
+              }
+            } else {
+              if (getFromID(source) === treeLink) {
+                connectIcons.push(`up_output_${getFromID(source)}`)
+              }
+              if (getToID(source) === treeLink) {
+                connectIcons.push(`up_input_${getToID(source)}`)
+              }
+            }
+          })
         }
       }
       return isValid ? (
@@ -318,6 +351,8 @@ const Manager: FC<ManagerProps> = ({
             labelText={treelabel}
             labelIcon={isEngineer ? MoreVertIcon : null}
             onClick={(event) => handleMenu(event, nodeId)}
+            onLabelClick={(event) => {event.preventDefault()}}
+            // onIconClick={(event) => {event.preventDefault()}}
             relations={connectIcons}
           >
             {depths[index + 1] &&
@@ -430,6 +465,7 @@ const Manager: FC<ManagerProps> = ({
                   }]}
                 selectedIndex={currentPanelTab}
                 onOptionChanged={handlePanelChange}
+                className={classes.tabPanel}
               />
               {currentPanelTab === 0 && (
                 <DataTable
