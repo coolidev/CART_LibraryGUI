@@ -42,6 +42,18 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   btn: {
     padding: 0
+  },
+  relationIcon: {
+    padding: '0.5px',
+    margin: '0.5px 1.5px',
+    borderRadius: '50%'
+  },
+  onRelationIconHold: {
+    padding: '0.5px',
+    margin: '0.5px 1.5px',
+    borderRadius: '50%',
+    backgroundColor: 'black',
+    color: 'white'
   }
 }));
 
@@ -62,6 +74,28 @@ export const PlusSquare = (props: SvgIconProps) => {
     </SvgIcon>
   );
 };
+
+export const InputIcon = (props: SvgIconProps) => {
+  return (
+    <SvgIcon fontSize='inherit' style={{ width: 18, height: 18 }} {...props} viewBox="0 0 864.000000 864.000000">
+      <g transform="translate(0.000000, 864.000000) scale(0.100000,-0.100000)" stroke="none">
+        <path d="M1390 4275 l0 -2925 2030 0 2030 0 0 505 0 505 -1530 0 -1530 0 2 1913 3 1912 1528 3 1527 2 0 505 0 505 -2030 0 -2030 0 0 -2925z"/>
+        <path d="M5080 5334 c-80 -46 -152 -88 -160 -94 -8 -5 -40 -23 -70 -40 -30 -16 -73 -41 -95 -55 -22 -13 -56 -33 -75 -43 -38 -21 -147 -83 -195 -113 -16 -10 -70 -41 -120 -69 -49 -28 -108 -61 -130 -75 -22 -14 -47 -28 -55 -32 -16 -9 -230 -131 -258 -148 -9 -6 -52 -31 -95 -55 -44 -25 -95 -55 -115 -67 -21 -12 -44 -26 -52 -30 -17 -9 -158 -89 -180 -103 -8 -5 -60 -35 -115 -66 -55 -32 -104 -61 -108 -65 -5 -4 53 -42 130 -85 76 -44 145 -83 154 -89 9 -5 59 -34 110 -63 52 -29 112 -64 134 -77 22 -13 82 -48 133 -77 51 -29 110 -63 130 -75 20 -13 44 -26 52 -30 54 -28 157 -89 168 -100 7 -7 17 -13 21 -13 7 0 150 -82 211 -120 8 -5 56 -32 105 -60 50 -28 108 -61 130 -75 22 -13 81 -47 130 -75 50 -28 108 -61 130 -75 22 -13 65 -38 95 -55 89 -49 119 -67 135 -80 13 -11 15 26 17 316 l3 329 1178 3 1177 2 0 500 0 500 -1177 2 -1178 3 -3 318 c-1 174 -6 317 -10 316 -4 -1 -72 -39 -152 -85z"/>
+      </g>
+    </SvgIcon>
+  )
+}
+
+export const OutputIcon = (props: SvgIconProps) => {
+  return (
+    <SvgIcon fontSize='inherit' style={{ width: 18, height: 18 }} {...props} viewBox="0 0 864.000000 864.000000">
+      <g transform="translate(0.000000, 864.000000) scale(0.100000,-0.100000)" stroke="none">
+        <path d="M1540 4340 l0 -2920 2030 0 2030 0 0 500 0 500 -1525 0 -1525 0 0 1915 0 1915 1525 0 1525 0 0 505 0 505 -2030 0 -2030 0 0 -2920z"/>
+        <path d="M5758 5163 l-3 -318 -1177 -3 -1178 -2 0 -500 0 -500 1180 0 1180 0 0 -325 c0 -179 2 -325 4 -325 3 0 769 442 1136 655 158 92 331 192 485 280 61 34 126 72 145 83 19 12 76 44 127 73 51 29 90 56 87 60 -2 4 -17 14 -32 22 -15 8 -56 31 -92 52 -36 21 -81 46 -100 57 -19 10 -51 28 -70 39 -19 12 -98 58 -175 102 -77 44 -175 101 -218 126 -100 58 -85 50 -462 268 -176 101 -327 188 -335 193 -36 21 -380 219 -431 248 -31 18 -59 32 -63 32 -3 0 -7 -143 -8 -317z"/>
+      </g>
+    </SvgIcon>
+  )
+}
 
 const TransitionComponent = (props: TransitionProps) => {
   const style = useSpring({
@@ -106,10 +140,21 @@ export const StyledTreeItem = withStyles((theme: Theme) =>
   const classes = useStyles();
 
   const iconElements = (relations || []).map((relation, index) => {
-    if (relation === 'input') {
-      return <Button icon={"import"}></Button>
-    } else {
-      return <Button icon={"export"}></Button>
+    console.log(relation, index)
+    const properties = relation.split('_')
+    // if (properties[0] === 'up') {
+    //   return <InputIcon />
+    //   // return <Button icon={"import"} onClick={() => {alert("icon clicked")}}></Button>
+    // }
+    // if (properties[0] === 'down') {
+    //   return <OutputIcon />
+    //   // return <Button icon={"export"} onClick={() => {alert("icon clicked")}}></Button>
+    // }
+    if (properties[1] === 'output') {
+      return <OutputIcon className={classes.relationIcon} />
+    }
+    if (properties[1] === 'input') {
+      return <InputIcon className={classes.relationIcon} />
     }
   })
 

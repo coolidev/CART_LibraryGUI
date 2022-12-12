@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Grid } from "@material-ui/core";
+import { Grid, makeStyles, Theme } from "@material-ui/core";
 import { CheckBox } from "devextreme-react";
 import { FC } from "react";
 import { ConnectivitySource } from "..";
@@ -11,9 +11,22 @@ interface ConnectivityPanelProps {
   updateConnectivity: Function;
 }
 
+const useStyles = makeStyles((theme: Theme) => ({
+  checkBox: {
+    '& .dx-checkbox-icon': {
+      backgroundColor: 'white'
+    },
+    '& .dx-checkbox-icon::before': {
+      color: 'black'
+    }
+  }
+}))
+
 const ConnectivityPanel: FC<ConnectivityPanelProps> = ({ id, selected, source, updateConnectivity }) => {
   const [outputTo, setOutputTo] = useState<ConnectivitySource[]>([]);
   const [inputFrom, setInputFrom] = useState<ConnectivitySource[]>([]);
+
+  const classes = useStyles()
 
   useEffect(() => {
     const output = []
@@ -57,6 +70,7 @@ const ConnectivityPanel: FC<ConnectivityPanelProps> = ({ id, selected, source, u
                 defaultValue={source.isconnected}
                 text={`${[source.platform_2, source.antenna_2, source.rfFrontEnd_2, source.modDemod_2].join('/').replace(/^\/+|\/+$/gm,'')}`}
                 onValueChanged={() => {handleConnectivity(source.id, index)}}
+                className={classes.checkBox}
               />
             </div>
           ))}
