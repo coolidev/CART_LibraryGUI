@@ -60,7 +60,7 @@ const ConnectivityPanel: FC<ConnectivityPanelProps> = ({ id, selected, source, u
     <Grid container spacing={4}>
       <Grid item xs={6}>
         <h5>Select output to:</h5>
-        <Grid style={{ height: '300px', backgroundColor: "white", border: 'solid 1px blue', overflowY: "scroll", padding: "1rem" }}>
+        <Grid style={{ height: '300px', backgroundColor: "white", border: 'solid 1px', overflowY: "scroll", padding: "1rem" }}>
           {outputTo.map((source, index) => (
             <div 
               key={source.id + '_' + index}
@@ -78,7 +78,7 @@ const ConnectivityPanel: FC<ConnectivityPanelProps> = ({ id, selected, source, u
       </Grid>
       <Grid item xs={6}>
         <h5>Select input from:</h5>
-        <Grid style={{ height: '300px', backgroundColor: "white", border: 'solid 1px blue', overflowY: "scroll", padding: "1rem" }}>
+        <Grid style={{ height: '300px', backgroundColor: "white", border: 'solid 1px', overflowY: "scroll", padding: "1rem" }}>
           <h6>Will do "output to" first</h6>
         </Grid>
       </Grid>
