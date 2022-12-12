@@ -127,10 +127,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   tabPanel: {
     display: 'block',
     '& .dx-item.dx-tab-selected': {
-      color: 'inherit'
+      color: '#e34747'
     },
     '& .dx-tab.dx-tab-selected::before': {
-      backgroundColor: 'rgba(0,0,0,.54)'
+      backgroundColor: '#e34747'
     }
   }
 }));
