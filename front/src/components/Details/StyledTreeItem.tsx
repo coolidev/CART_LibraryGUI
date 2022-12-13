@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: '0.5px 1.5px',
     borderRadius: '50%'
   },
-  onRelationIconHold: {
+  onHoldRelationIcon: {
     padding: '0.5px',
     margin: '0.5px 1.5px',
     borderRadius: '50%',
@@ -126,7 +126,7 @@ export const StyledTreeItem = withStyles((theme: Theme) =>
       borderLeft: `1px dashed ${fade(theme.palette.text.primary, 0.4)}`
     }
   })
-)((props: StyledTreeItemProps & { relations?: string[] }) => {
+)((props: StyledTreeItemProps & { relations?: string[], onRelationCLick?: Function, onRelationEject?: Function, relationHoldID?: number }) => {
   const {
     nodeId,
     labelText,
@@ -135,26 +135,20 @@ export const StyledTreeItem = withStyles((theme: Theme) =>
     onClick,
     onRowClick,
     relations,
+    onRelationCLick,
+    onRelationEject,
+    relationHoldID,
     ...rest
   } = props;
   const classes = useStyles();
 
   const iconElements = (relations || []).map((relation, index) => {
-    console.log(relation, index)
     const properties = relation.split('_')
-    // if (properties[0] === 'up') {
-    //   return <InputIcon />
-    //   // return <Button icon={"import"} onClick={() => {alert("icon clicked")}}></Button>
-    // }
-    // if (properties[0] === 'down') {
-    //   return <OutputIcon />
-    //   // return <Button icon={"export"} onClick={() => {alert("icon clicked")}}></Button>
-    // }
     if (properties[1] === 'output') {
-      return <OutputIcon className={classes.relationIcon} />
+      return <OutputIcon className={`${properties[2] === relationHoldID.toString() ? classes.onHoldRelationIcon : classes.relationIcon}`} onMouseDown={() => {onRelationCLick(properties[2])}} onMouseUp={() => {onRelationEject()}} onMouseLeave={() => {onRelationEject()}} />
     }
     if (properties[1] === 'input') {
-      return <InputIcon className={classes.relationIcon} />
+      return <InputIcon className={`${properties[2] === relationHoldID.toString() ? classes.onHoldRelationIcon : classes.relationIcon}`} onMouseDown={() => {onRelationCLick(properties[2])}} onMouseUp={() => {onRelationEject()}} onMouseLeave={() => {onRelationEject()}} />
     }
   })
 

@@ -162,6 +162,7 @@ const Manager: FC<ManagerProps> = ({
   const [currentPanelTab, setCurrentPanelTab] = useState<number>(0);
   const [connectivitySource, setConnectivitySource] = useState<ConnectivitySource[]>([]);
   const [connectionChangeFlag, setConnectionChangeFlag] = useState<boolean>(false);
+  const [relationHoldID, setRelationHoldID] = useState<number>(0);
   const { isEngineer } = useSelector(state => state.user);
 
   useEffect(() => {
@@ -281,6 +282,14 @@ const Manager: FC<ManagerProps> = ({
     setSelected(selected.filter((item, i) => i <= idx));
   };
 
+  const handleRelationHold = (idx: number) => {
+    setRelationHoldID(idx)
+  }
+
+  const handleRelationEject = () => {
+    setRelationHoldID(0)
+  }
+
   const getTreeID = (source) => {
     return [source.platform_Id, source.antenna_Id, source.rfFrontEnd_Id, source.modDemod_Id].join('_').replace(/^_+|_+$/gm,'')
   }
@@ -328,17 +337,17 @@ const Manager: FC<ManagerProps> = ({
           resources.map(source => {
             if (source.down) {
               if (getFromID(source) === treeLink) {
-                connectIcons.push(`down_output_${getFromID(source)}`)
+                connectIcons.push(`down_output_${source.id}_${getFromID(source)}`)
               }
               if (getToID(source) === treeLink) {
-                connectIcons.push(`down_input_${getToID(source)}`)
+                connectIcons.push(`down_input_${source.id}_${getToID(source)}`)
               }
             } else {
               if (getFromID(source) === treeLink) {
-                connectIcons.push(`up_output_${getFromID(source)}`)
+                connectIcons.push(`up_output_${source.id}_${getFromID(source)}`)
               }
               if (getToID(source) === treeLink) {
-                connectIcons.push(`up_input_${getToID(source)}`)
+                connectIcons.push(`up_input_${source.id}_${getToID(source)}`)
               }
             }
           })
@@ -352,8 +361,10 @@ const Manager: FC<ManagerProps> = ({
             labelIcon={isEngineer ? MoreVertIcon : null}
             onClick={(event) => handleMenu(event, nodeId)}
             onLabelClick={(event) => {event.preventDefault()}}
-            // onIconClick={(event) => {event.preventDefault()}}
             relations={connectIcons}
+            onRelationCLick={handleRelationHold}
+            onRelationEject={handleRelationEject}
+            relationHoldID={relationHoldID}
           >
             {depths[index + 1] &&
               nextValid &&
