@@ -14,10 +14,12 @@ interface ConnectivityPanelProps {
 const useStyles = makeStyles((theme: Theme) => ({
   checkBox: {
     '& .dx-checkbox-icon': {
-      backgroundColor: 'white'
+      backgroundColor: 'white',
+      border: '2px solid rgba(0,0,0,.54)'
     },
-    '& .dx-checkbox-icon::before': {
-      color: 'black'
+    '&.dx-checkbox-checked .dx-checkbox-icon::before': {
+      color: 'black',
+      content: '"\\00d7"'
     }
   }
 }))
