@@ -75,23 +75,45 @@ export const PlusSquare = (props: SvgIconProps) => {
   );
 };
 
-export const InputIcon = (props: SvgIconProps) => {
+export const InputDownIcon = (props: SvgIconProps) => {
   return (
     <SvgIcon fontSize='inherit' style={{ width: 18, height: 18 }} {...props} viewBox="0 0 864.000000 864.000000">
       <g transform="translate(0.000000, 864.000000) scale(0.100000,-0.100000)" stroke="none">
-        <path d="M1390 4275 l0 -2925 2030 0 2030 0 0 505 0 505 -1530 0 -1530 0 2 1913 3 1912 1528 3 1527 2 0 505 0 505 -2030 0 -2030 0 0 -2925z"/>
-        <path d="M5080 5334 c-80 -46 -152 -88 -160 -94 -8 -5 -40 -23 -70 -40 -30 -16 -73 -41 -95 -55 -22 -13 -56 -33 -75 -43 -38 -21 -147 -83 -195 -113 -16 -10 -70 -41 -120 -69 -49 -28 -108 -61 -130 -75 -22 -14 -47 -28 -55 -32 -16 -9 -230 -131 -258 -148 -9 -6 -52 -31 -95 -55 -44 -25 -95 -55 -115 -67 -21 -12 -44 -26 -52 -30 -17 -9 -158 -89 -180 -103 -8 -5 -60 -35 -115 -66 -55 -32 -104 -61 -108 -65 -5 -4 53 -42 130 -85 76 -44 145 -83 154 -89 9 -5 59 -34 110 -63 52 -29 112 -64 134 -77 22 -13 82 -48 133 -77 51 -29 110 -63 130 -75 20 -13 44 -26 52 -30 54 -28 157 -89 168 -100 7 -7 17 -13 21 -13 7 0 150 -82 211 -120 8 -5 56 -32 105 -60 50 -28 108 -61 130 -75 22 -13 81 -47 130 -75 50 -28 108 -61 130 -75 22 -13 65 -38 95 -55 89 -49 119 -67 135 -80 13 -11 15 26 17 316 l3 329 1178 3 1177 2 0 500 0 500 -1177 2 -1178 3 -3 318 c-1 174 -6 317 -10 316 -4 -1 -72 -39 -152 -85z"/>
+        <path d="M3858 6423 l-3 -1178 -317 -3 c-175 -1 -318 -4 -318 -6 0 -4 165 -294 180 -316 5 -8 23 -40 40 -70 16 -30 41 -73 55 -95 13 -22 33 -56 43 -75 21 -38 83 -147 113 -195 10 -16 41 -70 69 -120 28 -49 61 -108 75 -130 14 -22 28 -47 32 -55 9 -16 131 -230 148 -258 6 -9 31 -52 55 -95 25 -44 55 -95 67 -115 12 -21 26 -44 30 -52 9 -17 89 -158 103 -180 5 -8 35 -60 66 -115 32 -55 61 -104 65 -108 4 -5 42 53 85 130 44 76 83 145 89 154 5 9 34 59 63 110 29 52 64 112 77 134 13 22 48 82 77 133 29 51 63 110 75 130 13 20 26 44 30 52 28 54 89 157 100 168 7 7 13 17 13 21 0 7 82 150 120 211 5 8 32 56 60 105 28 50 61 108 75 130 13 22 47 81 75 130 28 50 61 108 75 130 13 22 38 65 55 95 49 89 67 119 80 135 11 13 -26 15 -316 17 l-329 3 -3 1178 -2 1177 -500 0 -500 0 -2 -1177z"/>
+        <path d="M1440 3420 l0 -2030 2925 0 2925 0 0 2030 0 2030 -505 0 -505 0 0 -1530 0 -1530 -1912 2 -1913 3 -3 1528 -2 1527 -505 0 -505 0 0 -2030z"/>
       </g>
     </SvgIcon>
   )
 }
 
-export const OutputIcon = (props: SvgIconProps) => {
+export const OutputDownIcon = (props: SvgIconProps) => {
   return (
     <SvgIcon fontSize='inherit' style={{ width: 18, height: 18 }} {...props} viewBox="0 0 864.000000 864.000000">
       <g transform="translate(0.000000, 864.000000) scale(0.100000,-0.100000)" stroke="none">
-        <path d="M1540 4340 l0 -2920 2030 0 2030 0 0 500 0 500 -1525 0 -1525 0 0 1915 0 1915 1525 0 1525 0 0 505 0 505 -2030 0 -2030 0 0 -2920z"/>
-        <path d="M5758 5163 l-3 -318 -1177 -3 -1178 -2 0 -500 0 -500 1180 0 1180 0 0 -325 c0 -179 2 -325 4 -325 3 0 769 442 1136 655 158 92 331 192 485 280 61 34 126 72 145 83 19 12 76 44 127 73 51 29 90 56 87 60 -2 4 -17 14 -32 22 -15 8 -56 31 -92 52 -36 21 -81 46 -100 57 -19 10 -51 28 -70 39 -19 12 -98 58 -175 102 -77 44 -175 101 -218 126 -100 58 -85 50 -462 268 -176 101 -327 188 -335 193 -36 21 -380 219 -431 248 -31 18 -59 32 -63 32 -3 0 -7 -143 -8 -317z"/>
+        <path d="M1420 5070 l0 -2030 500 0 500 0 0 1525 0 1525 1915 0 1915 0 0 -1525 0 -1525 505 0 505 0 0 2030 0 2030 -2920 0 -2920 0 0 -2030z"/>
+        <path d="M3840 4060 l0 -1180 -325 0 c-179 0 -325 -2 -325 -4 0 -3 442 -769 655 -1136 92 -158 192 -331 280 -485 34 -60 72 -126 83 -145 12 -19 44 -76 73 -127 29 -51 56 -90 60 -87 4 2 14 17 22 32 8 15 31 56 52 92 21 36 46 81 57 100 10 19 28 51 39 70 12 19 58 98 102 175 44 77 101 175 126 218 58 100 50 85 268 462 101 176 188 327 193 335 21 36 219 380 248 431 18 31 32 59 32 63 0 3 -143 7 -317 8 l-318 3 -3 1178 -2 1177 -500 0 -500 0 0 -1180z"/>
+      </g>
+    </SvgIcon>
+  )
+}
+
+export const InputUpIcon = (props: SvgIconProps) => {
+  return (
+    <SvgIcon fontSize='inherit' style={{ width: 18, height: 18 }} {...props} viewBox="0 0 864.000000 864.000000">
+      <g transform="translate(0.000000, 864.000000) scale(0.100000,-0.100000)" stroke="none">
+        <path d="M1350 5220 l0 -2030 505 0 505 0 0 1530 0 1530 1913 -2 1912 -3 3 -1527 2 -1528 505 0 505 0 0 2030 0 2030 -2925 0 -2925 0 0 -2030z"/>
+        <path d="M4194 5253 c-44 -76 -83 -145 -89 -154 -5 -9 -34 -59 -63 -110 -29 -52 -64 -112 -77 -134 -13 -22 -48 -82 -77 -133 -29 -51 -63 -110 -75 -130 -13 -20 -26 -44 -30 -52 -28 -54 -89 -157 -100 -168 -7 -7 -13 -17 -13 -21 0 -7 -82 -150 -120 -211 -5 -8 -32 -55 -60 -105 -28 -49 -61 -108 -75 -130 -13 -22 -47 -80 -75 -130 -28 -49 -61 -108 -75 -130 -13 -22 -38 -65 -55 -95 -49 -89 -67 -119 -80 -135 -11 -13 26 -15 316 -17 l329 -3 3 -1177 2 -1178 500 0 500 0 2 1178 3 1177 318 3 c174 1 317 4 317 6 0 4 -165 294 -180 316 -5 8 -23 40 -40 70 -16 30 -41 73 -55 95 -13 22 -33 56 -43 75 -21 38 -83 147 -113 195 -10 17 -41 71 -69 120 -28 50 -61 108 -75 130 -14 22 -28 47 -32 55 -9 16 -131 230 -148 258 -6 9 -31 52 -55 95 -25 44 -55 95 -67 115 -12 21 -26 44 -30 52 -9 17 -89 158 -103 180 -5 8 -35 60 -66 115 -32 55 -61 104 -65 108 -4 5 -42 -53 -85 -130z"/>
+      </g>
+    </SvgIcon>
+  )
+}
+
+export const OutputUpIcon = (props: SvgIconProps) => {
+  return (
+    <SvgIcon fontSize='inherit' style={{ width: 18, height: 18 }} {...props} viewBox="0 0 864.000000 864.000000">
+      <g transform="translate(0.000000, 864.000000) scale(0.100000,-0.100000)" stroke="none">
+        <path d="M4294 7738 c-5 -7 -14 -22 -20 -33 -6 -11 -28 -49 -49 -85 -21 -36 -46 -81 -57 -100 -10 -19 -28 -51 -39 -70 -12 -19 -58 -98 -102 -175 -44 -77 -101 -175 -126 -218 -58 -100 -50 -85 -268 -462 -101 -176 -188 -327 -193 -335 -21 -36 -219 -380 -248 -431 -18 -31 -32 -59 -32 -63 0 -3 143 -7 318 -8 l317 -3 3 -1177 2 -1178 500 0 500 0 0 1180 0 1180 325 0 c179 0 325 2 325 4 0 3 -442 769 -655 1136 -92 158 -192 331 -280 485 -34 61 -72 126 -83 145 -12 19 -40 69 -63 110 -61 109 -65 114 -75 98z"/>
+        <path d="M1380 3570 l0 -2030 2920 0 2920 0 0 2030 0 2030 -500 0 -500 0 0 -1525 0 -1525 -1915 0 -1915 0 0 1525 0 1525 -505 0 -505 0 0 -2030z"/>
       </g>
     </SvgIcon>
   )
@@ -145,10 +167,20 @@ export const StyledTreeItem = withStyles((theme: Theme) =>
   const iconElements = (relations || []).map((relation, index) => {
     const properties = relation.split('_')
     if (properties[1] === 'output') {
-      return <OutputIcon className={`${properties[2] === relationHoldID.toString() ? classes.onHoldRelationIcon : classes.relationIcon}`} onMouseDown={() => {onRelationCLick(properties[2])}} onMouseUp={() => {onRelationEject()}} onMouseLeave={() => {onRelationEject()}} />
+      if (properties[0] === 'down') {
+        return <OutputDownIcon className={`${properties[2] === relationHoldID.toString() ? classes.onHoldRelationIcon : classes.relationIcon}`} onMouseDown={() => {onRelationCLick(properties[2])}} onMouseUp={() => {onRelationEject()}} onMouseLeave={() => {onRelationEject()}} />
+      }
+      if (properties[0] === 'up') {
+        return <OutputUpIcon className={`${properties[2] === relationHoldID.toString() ? classes.onHoldRelationIcon : classes.relationIcon}`} onMouseDown={() => {onRelationCLick(properties[2])}} onMouseUp={() => {onRelationEject()}} onMouseLeave={() => {onRelationEject()}} />
+      }
     }
     if (properties[1] === 'input') {
-      return <InputIcon className={`${properties[2] === relationHoldID.toString() ? classes.onHoldRelationIcon : classes.relationIcon}`} onMouseDown={() => {onRelationCLick(properties[2])}} onMouseUp={() => {onRelationEject()}} onMouseLeave={() => {onRelationEject()}} />
+      if (properties[0] === 'down') {
+        return <InputDownIcon className={`${properties[2] === relationHoldID.toString() ? classes.onHoldRelationIcon : classes.relationIcon}`} onMouseDown={() => {onRelationCLick(properties[2])}} onMouseUp={() => {onRelationEject()}} onMouseLeave={() => {onRelationEject()}} />
+      }
+      if (properties[0] === 'up') {
+        return <InputUpIcon className={`${properties[2] === relationHoldID.toString() ? classes.onHoldRelationIcon : classes.relationIcon}`} onMouseDown={() => {onRelationCLick(properties[2])}} onMouseUp={() => {onRelationEject()}} onMouseLeave={() => {onRelationEject()}} />
+      }
     }
   })
 

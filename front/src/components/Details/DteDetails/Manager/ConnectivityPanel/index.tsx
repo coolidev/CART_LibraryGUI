@@ -42,28 +42,27 @@ const ConnectivityPanel: FC<ConnectivityPanelProps> = ({ id, selected, selectedS
 
     const selectedKey = selectedSource.length > 0 ? getTreeID(selectedSource[0]) : ''
 
-    relations.filter((one) => {
-      return (selectedKey == [one.platform_1_id, one.antenna_1_id, one.rfFrontEnd_1_id, one.modDemod_1_id].join('_').replace(/^_+|_+$/gm,''))
-    }).forEach((value, index) => {
-      // if (value.down === true) {
-        output.push(value)
-      // }
-      // else {
-      //   input.push(value)
-      // }
+    relations.forEach((one) => {
+      if (selectedKey == [one.platform_1_id, one.antenna_1_id, one.rfFrontEnd_1_id, one.modDemod_1_id].join('_').replace(/^_+|_+$/gm,'')) {
+        output.push(one)
+      }
+      if (selectedKey == [one.platform_2_id, one.antenna_2_id, one.rfFrontEnd_2_id, one.modDemod_2_id].join('_').replace(/^_+|_+$/gm,'')) {
+        input.push(one)
+      }
     })
+
     setOutputTo(output)
     setInputFrom(input)
   }, [selected, selectedSource])
 
-  // useEffect(() => {
-  //   console.log(outputTo.map(one => one.isconnected))
-  // }, [outputTo])
-
-  const handleConnectivity = (id: number, indexInList: number) => {
-    let newConnectivity = outputTo
+  const handleConnectivity = (id: number, indexInList: number, isOutput: boolean) => {
+    let newConnectivity = isOutput ? outputTo : inputFrom
     newConnectivity[indexInList].isconnected = !newConnectivity[indexInList].isconnected
-    setOutputTo([...newConnectivity])
+    if (isOutput) {
+      setOutputTo([...newConnectivity])
+    } else {
+      setInputFrom([...newConnectivity])
+    }
     updateConnectivity(id)
   } // this comes from super component
 
@@ -74,13 +73,13 @@ const ConnectivityPanel: FC<ConnectivityPanelProps> = ({ id, selected, selectedS
         <Grid style={{ height: '300px', backgroundColor: "white", border: 'solid 1px', overflowY: "scroll", padding: "1rem" }}>
           {outputTo.map((relations, index) => (
             <div 
-              key={relations.id + '_' + index}
+              key={'output' + relations.id + '_' + index}
               className="dx-field"
             >
               <CheckBox
                 defaultValue={relations.isconnected}
                 text={`${[relations.platform_2, relations.antenna_2, relations.rfFrontEnd_2, relations.modDemod_2].join('/').replace(/^\/+|\/+$/gm,'')}`}
-                onValueChanged={() => {handleConnectivity(relations.id, index)}}
+                onValueChanged={() => {handleConnectivity(relations.id, index, true)}}
                 className={classes.checkBox}
               />
             </div>
@@ -90,7 +89,19 @@ const ConnectivityPanel: FC<ConnectivityPanelProps> = ({ id, selected, selectedS
       <Grid item xs={6}>
         <h5>Select input from:</h5>
         <Grid style={{ height: '300px', backgroundColor: "white", border: 'solid 1px', overflowY: "scroll", padding: "1rem" }}>
-          <h6>Will do "output to" first</h6>
+          {inputFrom.map((relations, index) => (
+            <div 
+              key={'input' + relations.id + '_' + index}
+              className="dx-field"
+            >
+              <CheckBox
+                defaultValue={relations.isconnected}
+                text={`${[relations.platform_1, relations.antenna_1, relations.rfFrontEnd_1, relations.modDemod_1].join('/').replace(/^\/+|\/+$/gm,'')}`}
+                onValueChanged={() => {handleConnectivity(relations.id, index, false)}}
+                className={classes.checkBox}
+              />
+            </div>
+          ))}
         </Grid>
       </Grid>
     </Grid>
