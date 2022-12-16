@@ -290,16 +290,16 @@ const Manager: FC<ManagerProps> = ({
     setRelationHoldID(0)
   }
 
-  const getTreeID = (source) => {
-    return [source.platform_Id, source.antenna_Id, source.rfFrontEnd_Id, source.modDemod_Id].join('_').replace(/^_+|_+$/gm,'')
+  const getTreeID = (param) => {
+    return [param.platform_Id, param.antenna_Id, param.rfFrontEnd_Id, param.modDemod_Id].join('_').replace(/^_+|_+$/gm,'')
   }
 
-  const getFromID = (source: ConnectivitySource) => {
-    return [source.platform_1_id, source.antenna_1_id, source.rfFrontEnd_1_id, source.modDemod_1_id].join('_').replace(/^_+|_+$/gm,'')
+  const getFromID = (param: ConnectivitySource) => {
+    return [param.platform_1_id, param.antenna_1_id, param.rfFrontEnd_1_id, param.modDemod_1_id].join('_').replace(/^_+|_+$/gm,'')
   }
 
-  const getToID = (source: ConnectivitySource) => {
-    return [source.platform_2_id, source.antenna_2_id, source.rfFrontEnd_2_id, source.modDemod_2_id].join('_').replace(/^_+|_+$/gm,'')
+  const getToID = (param: ConnectivitySource) => {
+    return [param.platform_2_id, param.antenna_2_id, param.rfFrontEnd_2_id, param.modDemod_2_id].join('_').replace(/^_+|_+$/gm,'')
   }
 
   const renderTree = (key: string, result: SubSection[], parent?: string) => {
@@ -330,24 +330,24 @@ const Manager: FC<ManagerProps> = ({
 
       if (data.length > 0) {
         const treeLink = getTreeID(data[0])
-        const resources = connectivitySource.filter((source) => {
-          return (getFromID(source) === treeLink || getToID(source) === treeLink) && source.isconnected
+        const resources = connectivitySource.filter((resource) => {
+          return (getFromID(resource) === treeLink || getToID(resource) === treeLink) && resource.isconnected
         })
         if (resources.length > 0) {
-          resources.map(source => {
-            if (source.down) {
-              if (getFromID(source) === treeLink) {
-                connectIcons.push(`down_output_${source.id}_${getFromID(source)}`)
+          resources.map(resource => {
+            if (resource.down) {
+              if (getFromID(resource) === treeLink) {
+                connectIcons.push(`down_output_${resource.id}_${getFromID(resource)}`)
               }
-              if (getToID(source) === treeLink) {
-                connectIcons.push(`down_input_${source.id}_${getToID(source)}`)
+              if (getToID(resource) === treeLink) {
+                connectIcons.push(`down_input_${resource.id}_${getToID(resource)}`)
               }
             } else {
-              if (getFromID(source) === treeLink) {
-                connectIcons.push(`up_output_${source.id}_${getFromID(source)}`)
+              if (getFromID(resource) === treeLink) {
+                connectIcons.push(`up_output_${resource.id}_${getFromID(resource)}`)
               }
-              if (getToID(source) === treeLink) {
-                connectIcons.push(`up_input_${source.id}_${getToID(source)}`)
+              if (getToID(resource) === treeLink) {
+                connectIcons.push(`up_input_${resource.id}_${getToID(resource)}`)
               }
             }
           })
@@ -490,7 +490,8 @@ const Manager: FC<ManagerProps> = ({
                 <ConnectivityPanel
                   id={dataSource.id}
                   selected={selected}
-                  source={connectivitySource}
+                  selectedSource={source}
+                  relations={connectivitySource}
                   updateConnectivity={updateConnectivity}
                 />
               )}

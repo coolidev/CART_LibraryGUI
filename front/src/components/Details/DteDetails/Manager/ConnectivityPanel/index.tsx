@@ -3,11 +3,13 @@ import { Grid, makeStyles, Theme } from "@material-ui/core";
 import { CheckBox } from "devextreme-react";
 import { FC } from "react";
 import { ConnectivitySource } from "..";
+import { SubSection } from 'src/types/details';
 
 interface ConnectivityPanelProps {
   id: number;
   selected: string[];
-  source: ConnectivitySource[];
+  selectedSource: SubSection[];
+  relations: ConnectivitySource[];
   updateConnectivity: Function;
 }
 
@@ -24,28 +26,35 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }))
 
-const ConnectivityPanel: FC<ConnectivityPanelProps> = ({ id, selected, source, updateConnectivity }) => {
+const ConnectivityPanel: FC<ConnectivityPanelProps> = ({ id, selected, selectedSource, relations, updateConnectivity }) => {
   const [outputTo, setOutputTo] = useState<ConnectivitySource[]>([]);
   const [inputFrom, setInputFrom] = useState<ConnectivitySource[]>([]);
 
   const classes = useStyles()
 
+  const getTreeID = (param) => {
+    return [param.platform_Id, param.antenna_Id, param.rfFrontEnd_Id, param.modDemod_Id].join('_').replace(/^_+|_+$/gm,'')
+  }
+
   useEffect(() => {
     const output = []
     const input = []
-    source.filter((one) => {
-      return (selected.toString().replace(/^,+|,+$/gm,'') == [one.platform_1, one.antenna_1, one.rfFrontEnd_1, one.modDemod_1].toString().replace(/^,+|,+$/gm,''))
+
+    const selectedKey = selectedSource.length > 0 ? getTreeID(selectedSource[0]) : ''
+
+    relations.filter((one) => {
+      return (selectedKey == [one.platform_1_id, one.antenna_1_id, one.rfFrontEnd_1_id, one.modDemod_1_id].join('_').replace(/^_+|_+$/gm,''))
     }).forEach((value, index) => {
-      if (value.down === true) {
+      // if (value.down === true) {
         output.push(value)
-      }
-      else {
-        input.push(value)
-      }
+      // }
+      // else {
+      //   input.push(value)
+      // }
     })
     setOutputTo(output)
     setInputFrom(input)
-  }, [selected])
+  }, [selected, selectedSource])
 
   // useEffect(() => {
   //   console.log(outputTo.map(one => one.isconnected))
@@ -63,15 +72,15 @@ const ConnectivityPanel: FC<ConnectivityPanelProps> = ({ id, selected, source, u
       <Grid item xs={6}>
         <h5>Select output to:</h5>
         <Grid style={{ height: '300px', backgroundColor: "white", border: 'solid 1px', overflowY: "scroll", padding: "1rem" }}>
-          {outputTo.map((source, index) => (
+          {outputTo.map((relations, index) => (
             <div 
-              key={source.id + '_' + index}
+              key={relations.id + '_' + index}
               className="dx-field"
             >
               <CheckBox
-                defaultValue={source.isconnected}
-                text={`${[source.platform_2, source.antenna_2, source.rfFrontEnd_2, source.modDemod_2].join('/').replace(/^\/+|\/+$/gm,'')}`}
-                onValueChanged={() => {handleConnectivity(source.id, index)}}
+                defaultValue={relations.isconnected}
+                text={`${[relations.platform_2, relations.antenna_2, relations.rfFrontEnd_2, relations.modDemod_2].join('/').replace(/^\/+|\/+$/gm,'')}`}
+                onValueChanged={() => {handleConnectivity(relations.id, index)}}
                 className={classes.checkBox}
               />
             </div>
