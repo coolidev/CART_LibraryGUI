@@ -3,10 +3,38 @@
  * Each request corresponds to an associated method in
  * AnalysisController or AuthController.
  */
-
 import { Router } from "express";
 import upload from "./upload";
 import fs, { write } from "fs";
+
+function mapToArray<K,V>(o : Map<K,V>) : V[] {
+  let x : V[] = [];
+  o.forEach(elt => x.push(elt));
+  return x;
+}
+
+
+interface LinkSegment {
+  linkId : number;
+  connectionId : number | null;
+}
+
+interface RichLinkSegment {
+  linkId : number;
+  connectionId : number | null;
+  linkPosition ? : number;
+  userId : number;
+  networkId : number;
+  name : string;
+}
+
+interface LinkGroup {
+  linkId : number;
+  userId : number;
+  networkId : number;
+  name : string;
+  segments : RichLinkSegment[]
+}
 
 /**
  * A wrapper around an Express Router object that contains routes for
@@ -15,12 +43,11 @@ import fs, { write } from "fs";
  */
 export class Api {
   router: Router;
-
+  links : Map<number,LinkGroup>;
   constructor() {
     this.router = Router();
-
+    this.links = new Map<number,LinkGroup>();
     // Authentication routes
-
     // Allows user to create an account
     // CURRENTLY UNUSED
     this.router.post("/signup", async (req, res) => {
@@ -29,7 +56,6 @@ export class Api {
       const result = {};
       res.status(status).send(result);
     });
-
     // Allows admin user to create a user account
     this.router.post("/admin-create-user", async (req, res) => {
       const { name, email, phone, admin, engineer } = req.body;
@@ -37,7 +63,6 @@ export class Api {
       const result = {};
       res.status(status).send(result);
     });
-
     //
     this.router.post("/delete-user", async (req, res) => {
       const { email } = req.body;
@@ -45,7 +70,6 @@ export class Api {
       const result = {};
       res.status(status).send(result);
     });
-
     // Allows a user to log in
     this.router.post("/signin", async (req, res) => {
       const { email, password } = req.body;
@@ -53,7 +77,6 @@ export class Api {
       const result = { status: status, result: "111111" };
       res.status(status).send(result);
     });
-
     // Verifies that a user entered the correct SMS verification code
     this.router.post("/sms-verify", async (req, res) => {
       const { sms_code } = req.body;
@@ -66,13 +89,11 @@ export class Api {
       };
       res.status(status).send(obj);
     });
-
     this.router.post("/updateConnectivity", async (req, res) => {
       const status = 200;
       const obj = {};
       res.status(status).send(obj);
     });
-
     // Sends SMS code to a user as the first step in changing a password
     this.router.post("/change-password-number", async (req, res) => {
       const { phone } = req.body;
@@ -80,7 +101,6 @@ export class Api {
       const result = {};
       res.status(status).send(result);
     });
-
     // Allows a user to change their password
     this.router.post("/change-password-with-verification", async (req, res) => {
       const { email, oldpassword, password } = req.body;
@@ -88,7 +108,6 @@ export class Api {
       const result = {};
       res.status(status).send(result);
     });
-
     // Allows a user to change their password
     this.router.post("/change-password", async (req, res) => {
       const { email, oldpassword, password } = req.body;
@@ -96,7 +115,6 @@ export class Api {
       const result = {};
       res.status(status).send(result);
     });
-
     // Allows a user to change their user information
     this.router.post("/change-user-info", async (req, res) => {
       const { email, name, phone, oldpassword, origemail } = req.body;
@@ -104,49 +122,42 @@ export class Api {
       const result = {};
       res.status(status).send(result);
     });
-
     this.router.post("/manage-user", async (req, res) => {
       const { email, origEmail, name, phone, admin, engineer } = req.body;
       const status = 200;
       const result = {};
       res.status(status).send(result);
     });
-
     //
     this.router.post("/getUserName", async (req, res) => {
       const { email } = req.body;
       const result = {};
       res.status(200).send(result);
     });
-
     //
     this.router.post("/getUserPhone", async (req, res) => {
       const { email } = req.body;
       const result = {};
       res.status(200).send(result);
     });
-
     //
     this.router.post("/getIntroStatus", async (req, res) => {
       const { email } = req.body;
       const result = {};
       res.status(200).send(result);
     });
-
     //
     this.router.post("/getEngineerStatus", async (req, res) => {
       const { email } = req.body;
       const result = {};
       res.status(200).send(result);
     });
-
     //
     this.router.post("/getAdminStatus", async (req, res) => {
       const { email } = req.body;
       const result = {};
       res.status(200).send(result);
     });
-
     // Allows user to hide Intro popup on subsequent logins
     this.router.post("/requestIntroDisable", async (req, res) => {
       const { email, checkedShow } = req.body;
@@ -154,14 +165,12 @@ export class Api {
       const result = {};
       res.status(status).send(result);
     });
-
     //
     this.router.post("/getUserList", async (req, res) => {
       const { email } = req.body;
       const result = {};
       res.status(200).send(result);
     });
-
     /**
      * This API function accepts an email to identify the user and
      * returns all of the user's preferences.
@@ -352,7 +361,6 @@ export class Api {
       };
       res.status(200).send({ preference });
     });
-
     /**
      * This API function accepts an email to identify the user and
      * data describing the user's preferences.
@@ -364,7 +372,6 @@ export class Api {
       const result = preference;
       res.status(200).send({ preference });
     });
-
     this.router.get("/getFrequencyBandSpecs", async (_req, res) => {
       const data = [
         {
@@ -412,11 +419,8 @@ export class Api {
     ];
       res.status(200).send(data);
     });
-
     this.router.get("/getUser", async (req, res) => {
       const { email } = req.query;
-
-    
       res.status(200).send({
           email: 'test@teltrium.com',
           name: 'test',
@@ -425,16 +429,13 @@ export class Api {
           isEngineer: true
       });
   });
-
   this.router.get("/getUserAccount", async (req, res) => {
     const result = {
       isAdmin: true,
       isEngineer: true
   };
-
   res.status(200).send(result);
 });
-
     /**
      * @typedef {Object} GroundStationSummary
      * @property {number} id
@@ -502,7 +503,6 @@ export class Api {
       ];
       res.status(200).send(data);
     });
-
     /**
      * @typedef {Object} ExploreSummary
      * @property {string} system
@@ -512,18 +512,15 @@ export class Api {
      * @property {string} max_return_data_rate
      * @property {string} ssl_return_link_freq
      */
-
     /**
      * Returns data for the Explore Dashboard view.
      * @returns {ExploreSummary[]}
      */
     this.router.get("/requestExploreDashboard", async (_req, res) => {
-      const result = [
-        
+      const result : any = [
       ];
       res.status(200).send(result);
     });
-
     /**
      * @typedef {Object} ExploreDetail
      * @property {Object} master
@@ -531,7 +528,6 @@ export class Api {
      * @property {{ admin: boolean }} admin
      * @property {Object} csvData
      */
-
     /**
      * Returns data for the Explore Detail view.
      * @param {string} id System identifier.
@@ -1080,7 +1076,6 @@ export class Api {
       };
       res.status(200).send(result);
     });
-
     /**
      * @typedef {Object} DTESummary
      * @property {string} system
@@ -1089,7 +1084,6 @@ export class Api {
      * @property {string} numLocations
      * @property {string} freqBands
      */
-
     /**
      * Returns data for the DTE Dashboard view.
      * @returns {DTESummary[]}
@@ -1123,7 +1117,6 @@ export class Api {
       ];
       res.status(200).send(result);
     });
-
     /**
      * @typedef {Object} DTEDetail
      * @property {Object} master
@@ -1131,7 +1124,6 @@ export class Api {
      * @property {{ admin: boolean }} admin
      * @property {Object} csvData
      */
-
     /**
      * Returns data for the DTE Detail view.
      * @param {string} id System identifier.
@@ -1586,7 +1578,6 @@ export class Api {
       };
       res.status(200).send(result);
     });
-
     this.router.post("/requestRelationship", async (req, res) => {
       const { id } = req.body;
       const result=[
@@ -1761,7 +1752,6 @@ export class Api {
      ];
       res.status(200).send(result);
     });
-
     /**
      * @typedef {Object} UpdatedAttribute
      * @property {number|string} id
@@ -1772,7 +1762,6 @@ export class Api {
      * @property {string} notes
      * @property {string} refs
      */
-
     /**
      * Updates System Attribute data.
      * @param {UpdatedAttribute} params Describes the updated System Attribute.
@@ -1783,7 +1772,6 @@ export class Api {
       const result = {};
       res.status(200).send(result);
     });
-
     /**
      * @typedef {Object} MissionParams
      * @property {number} altitude
@@ -1797,7 +1785,6 @@ export class Api {
      * @property {number} launchYear
      * @property {number} powerAmplifier
      */
-
     /**
      * @typedef {Object} RankingWeights
      * @property {{ label: string, value: string }} availability
@@ -1807,7 +1794,6 @@ export class Api {
      * @property {{ label: string, value: string }} systemIOCTime
      * @property {{ label: string, value: string }} freqViability
      */
-
     /**
      * @typedef {Object} ComparisonResults
      * @property {Array} rows Rows of the comparison table.
@@ -1818,7 +1804,6 @@ export class Api {
      * @property {string[]} csvData Formatted data for export.
      * @property {string} fileName Name of the export file.
      */
-
     /**
      * Returns System Comparison data.
      * @param {project} pass the project object. This call will filter through saves and return items marked for comparison
@@ -2386,22 +2371,22 @@ export class Api {
           "IntelsatEpicNG",
           "SpaceX 1110",
         ],
-		columnMapping: [
-			"",
-			"s537j3i1-s9a2-6354-3s8d-95sdf7sd9513",
-			"s537j3i1-s9a2-6354-3s8d-95sdf7sd9521",
-			"e973f0f7-d7a6-4641-9d8d-43bcf2da5332",
-			"s537j3i1-s9a2-6354-3s8d-95sdf7sd9523",
-			"s537j3i1-s9a2-6354-3s8d-95sdf7sd9513",
-			"s537j3i1-s9a2-6354-3s8d-95sdf7sd9521",
-			"e973f0f7-d7a6-4641-9d8d-43bcf2da5332",
-			"s537j3i1-s9a2-6354-3s8d-95sdf7sd9523",
-			"s537j3i1-s9a2-6354-3s8d-95sdf7sd9513",
-			"s537j3i1-s9a2-6354-3s8d-95sdf7sd9521",
-			"e973f0f7-d7a6-4641-9d8d-43bcf2da5332",
-			"s537j3i1-s9a2-6354-3s8d-95sdf7sd9523",
-			"s537j3i1-s9a2-6354-3s8d-95sdf7sd9513",			
-		],
+        columnMapping: [
+            "",
+            "s537j3i1-s9a2-6354-3s8d-95sdf7sd9513",
+            "s537j3i1-s9a2-6354-3s8d-95sdf7sd9521",
+            "e973f0f7-d7a6-4641-9d8d-43bcf2da5332",
+            "s537j3i1-s9a2-6354-3s8d-95sdf7sd9523",
+            "s537j3i1-s9a2-6354-3s8d-95sdf7sd9513",
+            "s537j3i1-s9a2-6354-3s8d-95sdf7sd9521",
+            "e973f0f7-d7a6-4641-9d8d-43bcf2da5332",
+            "s537j3i1-s9a2-6354-3s8d-95sdf7sd9523",
+            "s537j3i1-s9a2-6354-3s8d-95sdf7sd9513",
+            "s537j3i1-s9a2-6354-3s8d-95sdf7sd9521",
+            "e973f0f7-d7a6-4641-9d8d-43bcf2da5332",
+            "s537j3i1-s9a2-6354-3s8d-95sdf7sd9523",
+            "s537j3i1-s9a2-6354-3s8d-95sdf7sd9513",         
+        ],
         tooltips: {
           overallRanking:
             "Relative ranking considers if the system meets return link performance requirements (availability, throughput, gaps), readiness by mission launch date, and viability of frequency selection. Systems meeting more criteria are ranked higher.",
@@ -2427,15 +2412,15 @@ export class Api {
           coverage:
             "Description: RF Coverage is captured as a percentage, representing the duration that the user satellite has enough signal power to close the communications link with the commercial communications system, over a defined period.<br/><br/>Analysis notes: RF coverage is based on physical link modeling and the attributes of the commercial system as defined by available Federal Communications Commission filings.",
           mean_contacts:
-            "Description: Mean Number of Contacts Per Orbit is representative of how many network contacts a user would experience per orbit based on user orbit relative to the commercial system’s configuration.​<br/><br/>Analysis notes: This value is derived from the physical link modeling and resultant RF coverage contact statistics.​",
+            "Description: Mean Number of Contacts Per Orbit is representative of how many network contacts a user would experience per orbit based on user orbit relative to the commercial system’s configuration.<br/><br/>Analysis notes: This value is derived from the physical link modeling and resultant RF coverage contact statistics.",
           mean_coverage_duration:
-            "Description: The average duration of an individual RF coverage contact event, measured in seconds.​<br/><br/>Analysis notes: The average duration of an RF coverage contact is determined by the physical link model which is based on the evaluation of the user satellite having enough signal power to close the communications link with the commercial system.​",
+            "Description: The average duration of an individual RF coverage contact event, measured in seconds.<br/><br/>Analysis notes: The average duration of an RF coverage contact is determined by the physical link model which is based on the evaluation of the user satellite having enough signal power to close the communications link with the commercial system.",
           average_gap:
             "Description: The average gap in RF coverage the user will experience, measured in minutes.<br/><br/>Analysis notes: The average gap in RF coverage as determined by the physical link model which is based on evaluation of the user satellite having enough signal power to close the communications link with the commercial system.",
           max_gap:
-            "Description: The maximum gap in RF coverage the user will experience, measured in minutes.​<br/><br/>Analysis notes: The maximum gap in RF coverage as determined by the physical link model which is based on the evaluation of the user satellite having enough signal power to close the communications link with the commercial system.​",
+            "Description: The maximum gap in RF coverage the user will experience, measured in minutes.<br/><br/>Analysis notes: The maximum gap in RF coverage as determined by the physical link model which is based on the evaluation of the user satellite having enough signal power to close the communications link with the commercial system.",
           mean_response_time:
-            "Description: Mean response time measures, on average, how long a user might have to wait for the next RF coverage connection, based on the distribution of gap durations in the observed scenario.<br/><br/>Analysis notes: Mean response time is calculated using the results of the physical link modeling and RF coverage intervals and gaps.​",
+            "Description: Mean response time measures, on average, how long a user might have to wait for the next RF coverage connection, based on the distribution of gap durations in the observed scenario.<br/><br/>Analysis notes: Mean response time is calculated using the results of the physical link modeling and RF coverage intervals and gaps.",
           availability:
             "Description: Percent of time that the user can communicate with the network.<br/><br/>Analysis notes: Effective communication time is the result of multiple factors including RF coverage (time with sufficient power), signal acquisition time, and network registration and other network processing effects. The resultant percentage is compared to the user input need for network availability.",
           data_volume:
@@ -3560,7 +3545,6 @@ export class Api {
       };
       res.status(200).send(result);
     });
-
     /**
      * @typedef {Object} GitCommit
      * @property {string} name
@@ -3569,7 +3553,6 @@ export class Api {
      * @property {string} author_email
      * @property {string} readme
      */
-
     /**
      * Returns data for the Git repository viewer.
      * @param {string} filter System name.
@@ -3580,7 +3563,6 @@ export class Api {
       const result = {};
       res.status(200).send(result);
     });
-
     /**
      * Returns array of system names.
      * @returns {string[]}
@@ -3593,43 +3575,36 @@ export class Api {
       };
       res.status(200).send(result);
     });
-
     this.router.post("/systemNameToKey", async (req, res) => {
       const { system } = req.body;
       const result = { systemId: 1 };
       res.status(200).send(result);
     });
-
     this.router.post("/deleteSystem", async (req, res) => {
       const { systemName } = req.body;
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post("/deleteGroundStation", async (req, res) => {
       const { systemName, groundStationName } = req.body;
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post("/deleteAntenna", async (req, res) => {
       const { groundStationName, antennaName } = req.body;
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post("/deleteFrequencyBand", async (req, res) => {
       const { antennaName, frequencyBandName } = req.body;
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post("/deleteModDemod", async (req, res) => {
       const { antennaName, frequencyBandName, modDemodName } = req.body;
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.get("/getAttributeValues", async (req, res) => {
       const { sub_key } = req.query;
       const status = 200;
@@ -3661,25 +3636,21 @@ export class Api {
       ];
       res.status(200).send(result);
     });
-
     this.router.post("/createSystem", async (req, res) => {
       const { systemName, networkType } = req.body;
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post("/createGroundStation", async (req, res) => {
       const { GSName, dteName } = req.body;
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post("/createAntenna", async (req, res) => {
       const { antennaName, GSName } = req.body;
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post("/getGroundStations", async (req, res) => {
       const { networkId } = req.body;
       const result = [
@@ -3734,13 +3705,11 @@ export class Api {
       ];
       res.status(200).send(result);
     });
-
     this.router.post("/duplicateGroundStation", async (req, res) => {
       const { GSId, dteId } = req.body;
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post("/getAntennas", async (req, res) => {
       const { networkId, groundStationName } = req.body;
       const result = [
@@ -3771,7 +3740,6 @@ export class Api {
       ];
       res.status(200).send(result);
     });
-
     this.router.post("/getAvailableAntennas", async (req, res) => {
       const { groundStationId } = req.body;
       const result = [
@@ -3802,32 +3770,27 @@ export class Api {
       ];
       res.status(200).send(result);
     });
-
     this.router.post("/duplicateAntenna", async (req, res) => {
       const { antennaId, GSName, dteId } = req.body;
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post("/createfrequencyBand", async (req, res) => {
       const { frequencyBandName, antennaName } = req.body;
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post("/createModDemod", async (req, res) => {
       const { modDemodName, frequencyBandName, antennaName } = req.body;
       const result = {};
       res.status(200).send(result);
     });
-
     /**
      * @typedef {Object} Metric
      * @property {number} altitude
      * @property {number} inclination
      * @property {number} value
      */
-
     /**
      * @typedef {Object} RegPlot
      * @property {{ type: string, label: string, plot_value: Metric[] }} data
@@ -3835,7 +3798,6 @@ export class Api {
      * @property {number} maxAltitude
      * @property {string} text
      */
-
     /**
      * Returns data for a regression plot.
      * @param {string} system System name.
@@ -3847,13 +3809,11 @@ export class Api {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post("/requestTerrestrialPlot", async (req, res) => {
       const { system, version, model } = req.body;
       const result = {};
       res.status(200).send(result);
     });
-
     /**
      * @typedef {Object} SystemEval
      * @property {number} maxAltitude
@@ -3863,7 +3823,6 @@ export class Api {
      * @property {} userBurdenEqns
      * @property {} equations
      */
-
     /**
      * Returns System Evaluation data.
      * @param {string} system System identifier.
@@ -4099,7 +4058,6 @@ export class Api {
           terrestrial: {},
         },
       };
-
       const orbital = {
         data: {
           coverageMinutes: {
@@ -4297,9 +4255,7 @@ export class Api {
           ],
         },
       };
-
       ///////////////////////////////////////////
-
       const systemParams = {
         systemName: "NEN",
         version: 1,
@@ -4730,11 +4686,9 @@ export class Api {
           ]
         }
       };
-
       //if (system === 3 || system === "3") {
       //  result = dte;
       //}
-
       res.status(200).send({
         systemParams: systemParams,
         linkParams: linkParams,
@@ -4742,7 +4696,6 @@ export class Api {
         predictedData: predictedData
       });
     });
-
     this.router.post("/runModel", async (req, res) => {
       const {
         networkId,
@@ -4755,7 +4708,6 @@ export class Api {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post("/requestEngineerDashboard", async (req, res) => {
       const result = {
         modulations: [
@@ -4773,13 +4725,11 @@ export class Api {
       };
       res.status(200).send(result);
     });
-
     this.router.post("/saveEngineerDashboardData", async (req, res) => {
       const { type, id } = req.body;
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post("/combineGroundStations", async (req, res) => {
       const { groundStations, frequencyBand, userAltitude, userInclination } =
         req.body;
@@ -4802,7 +4752,6 @@ export class Api {
       };
       res.status(200).send(result);
     });
-
     this.router.post("/checkGroundStations", async (req, res) => {
       res.setTimeout(0);
       const { groundStations, frequencyBand, userAltitude, userInclination } =
@@ -4810,7 +4759,6 @@ export class Api {
       const result = { state: 1 }; //1 indicates that all data exists, 0 that data is missing, -1 if currently processing
       res.status(200).send(result);
     });
-
     this.router.post("/saveGroundStations", async (req, res) => {
       res.setTimeout(0);
       const { groundStations, frequencyBand, userAltitude, userInclination } =
@@ -4818,10 +4766,8 @@ export class Api {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.get("/get-engineering-models", async (req, res) => {
       const { networkId, networkName, groundStationName, type } = req.query;
-
       res.status(200).send({
         models: {
           id: 1,
@@ -4832,53 +4778,42 @@ export class Api {
         },
       });
     });
-
     this.router.post("/edit-engineering-model-notes", async (req, res) => {
       const { modelId, notes } = req.body;
       res.status(200).send({});
     });
-
     this.router.post(
       "/upload-model",
       upload.single("file"),
       async (req, res) => {
         res.setTimeout(0);
-
         const { networkId, groundStationName, type } = req.body;
-
+        //@ts-ignore
         const readStream = fs.createReadStream(req.file.path, {
           highWaterMark: 16 * 1024,
         });
         const data: Buffer[] = [];
-
         readStream.on("data", (chunk: Buffer) => {
           data.push(chunk);
         });
-
         readStream.on("end", async () => {
           const bytes = Buffer.concat(data);
-
           res.status(200).send({ response: "done" });
         });
-
         readStream.on("error", (err: any) => {
           res.status(500).send({});
         });
       }
     );
-
     this.router.get("/download-model", async (req, res) => {
       res.setTimeout(0);
-
       const { modelId, networkName, groundStationName, type } = req.query;
-
       var { Readable } = require("stream");
       const readStream = new Readable({
         read() {
           this.push(null);
         },
       });
-
       // What is the best path to write to? This differs in
       // development vs. production.
       const writeStream = fs.createWriteStream(`../front/build/test.zip`);
@@ -4886,13 +4821,11 @@ export class Api {
         res.status(200).send({ filename: "test.zip" });
       });
     });
-
     this.router.post(
       "/upload-data-file",
       upload.array("file"),
       async (req, res) => {
         res.setTimeout(0);
-
         const {
           networkType,
           networkId,
@@ -4906,53 +4839,43 @@ export class Api {
         res.status(200).send({ status: "done" });
       }
     );
-
     // Statistics dashboard
-
     // Return all systems and associated versions.
     this.router.get("/get-systems-and-versions", async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     // Return all systems and associated precs used in modeling.
     this.router.get("/get-precs", async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     // Return information about the latest model for each network.
     this.router.get("/get-version-ids", async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     // Return all beam types used in modeling.
     this.router.get("/get-beams-types", async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.get("/get-ground-stations", async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.get("/get-modify-systems", async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.get("/get-modify-attr-versions", async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.get("/get-modify-models", async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.get("/get-modify-beams", async (req, res) => {
       const result = {};
       res.status(200).send(result);
@@ -4961,97 +4884,78 @@ export class Api {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post("/upload-regressions", async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post("/systemNameToKey", async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post("/get-systems", async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.get("/get-cart", async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.get("/get-file-id", async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.get("/events", async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post("/get-versions", async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.get("/get-models", async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post("/get-items", async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post("/delete-record", async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post("/delete-all", async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post("/migrate", async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post("/create-system", async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post("/create-attribute-version", async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post("/create-model", async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.get("/change-db", async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post('/add-link-budget-item', async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.post('/update-note', async (req, res) => {
       const result = {};
       res.status(200).send(result);
     });
-
     this.router.get('/get-link-budget', async (req, res) => {
       const linkBudgetItems = [
         {
@@ -5073,29 +4977,22 @@ export class Api {
           notes: 'Notes #2'
         }
       ];
-
       const result = {
         linkBudget: linkBudgetItems,
         isAdmin: 0,
         isEngineer: 0
       };
-
       res.status(200).send(result);
-
     });
-
     this.router.post('/update-user-link-budget', async (req, res) => {
       res.status(200).send({});
     });
-
     this.router.post('/reorder-link-budget', async (req, res) => {
       res.status(200).send({});
     });
-
     this.router.post('/delete-link-budget-item', async (req, res) => {
       res.status(200).send({});
     });
-
     this.router.get('/get-engineering-models', async (req, res) => {
       const engineeringModels = [
         {
@@ -5113,22 +5010,230 @@ export class Api {
           notes: 'more notes'
         }
       ];
-
       res.status(200).send({ models: engineeringModels });
     });
-
     this.router.post('/edit-engineering-model-notes', async (req, res) => {
       res.status(200).send({});
     });
-
     this.router.post('/upload-model', upload.single('file'), async (req, res) => {
       res.status(200).send({ response: 'done' });
     });
-
     this.router.get('/download-model', async (req, res) => {
       res.status(200).send({ filename: 'test-model.zip' });
     });
+    
+    this.links = new Map();
+    let dummyLinkData = [
+      {
+          "userId": 4,
+          "networkId": 13,
+          "linkId": 0,
+          "name": "testLink0",
+          "segments": [
+              {
+                  "linkId": 0,
+                  "name": "testLink0",
+                  "networkId": 13,
+                  "connectionId": 7,
+                  "userId": 4
+              },
+              {
+                  "linkId": 0,
+                  "name": "testLink0",
+                  "networkId": 13,
+                  "connectionId": 2,
+                  "userId": 4
+              },
+              {
+                  "linkId": 0,
+                  "name": "testLink0",
+                  "networkId": 13,
+                  "connectionId": 3,
+                  "userId": 4
+              },
+              {
+                  "linkId": 0,
+                  "name": "testLink0",
+                  "networkId": 13,
+                  "connectionId": 4,
+                  "userId": 4
+              },
+              {
+                  "linkId": 0,
+                  "name": "testLink0",
+                  "networkId": 13,
+                  "connectionId": 8,
+                  "userId": 4
+              }
+          ]
+      },
+      {
+          "userId": 4,
+          "networkId": 13,
+          "linkId": 1,
+          "name": "testLink1",
+          "segments": [
+              {
+                  "linkId": 1,
+                  "name": "testLink1",
+                  "networkId": 13,
+                  "connectionId": 7,
+                  "userId": 4
+              },
+              {
+                  "linkId": 1,
+                  "name": "testLink1",
+                  "networkId": 13,
+                  "connectionId": 1,
+                  "userId": 4
+              },
+              {
+                  "linkId": 1,
+                  "name": "testLink1",
+                  "networkId": 13,
+                  "connectionId": 2,
+                  "userId": 4
+              },
+              {
+                  "linkId": 1,
+                  "name": "testLink1",
+                  "networkId": 13,
+                  "connectionId": 4,
+                  "userId": 4
+              },
+              {
+                  "linkId": 1,
+                  "name": "testLink1",
+                  "networkId": 13,
+                  "connectionId": 5,
+                  "userId": 4
+              }
+          ]
+      }
+    ];
+    dummyLinkData.forEach((elt) => {
+      this.links.set(elt.linkId, elt);
+    });
+
+/**
+ * Creat link segments. Essentially, add a list of connections to
+ * the specified link.
+ * @param req 
+ * @param res 
+ */
+    this.router.post('/createLinkSegments', async (req , res) => {
+    let {
+        linkSegments,
+        userId,
+        networkId,
+        linkName
+    } = req.body;
+    let returnId = null;
+    userId=4;
+    networkId=13;
+    try {
+        if(linkSegments == null || !Array.isArray(linkSegments)) {
+            res.status(400).json({error:`Must provide linkSegments an array of link segments`});
+            return;
+        }
+        let linkId = linkSegments[0].linkId;
+        const inconsistentLinkId = linkSegments.reduce((a,c) => c.linkId != linkId || a , false);
+        if(inconsistentLinkId) {
+            res.status(400).json({error:`Must provide no more than one link id.`});
+            return;
+        }
+        if(linkId == null) {
+            if(userId == null || networkId == null || linkName == null) {
+                res.status(400).json({error:`Must provide a userId, linkName, and networkId if attempting to create new Link.`});
+                return;
+            }
+            this.links.set(this.links.size, {
+              linkId:this.links.size,
+              userId,
+              networkId,
+              name:linkName,
+              segments:[]
+            });
+            let newId = {id:this.links.size-1};
+            if(newId) {
+                linkId = newId.id;
+                returnId = linkId;
+            } else {
+                throw new Error(`Failed to create new Link`);
+            }
+        }
+    
+        for(let i = 0; i < linkSegments.length; i++) {
+            let {connectionId} = linkSegments[i];
+            this.links.get(linkId)?.segments.push({linkId,connectionId,userId,networkId,name:linkName});
+        }
+        res.status(200);
+        if(returnId != null) {
+            res.json({linkId:returnId});
+        } else {
+            res.send();
+        }
+    } catch (err) {
+        res.status(500).json({error:`Encountered an issue while creating link segments, cancelled...:${err}`});
+    }
+    });
+
+    this.router.post('/getLinks', async (req, res) => {
+      let {
+          userId,
+          networkId,
+          linkId
+      } = req.body;
+      networkId=13;
+      userId=4;
+      try {
+          let allLinks = mapToArray(this.links);
+          if(userId != null) {
+            allLinks = allLinks.filter(elt => elt.userId === userId);
+          }
+          if(networkId != null) {
+            allLinks = allLinks.filter(elt => elt.networkId === networkId);
+          }
+          if(linkId != null) {
+            allLinks = allLinks.filter(elt => elt.linkId === linkId);
+          }
+          let results : LinkGroup[] = allLinks;
+          if(results.length > 0) {
+              res.status(200).json(results);
+          } else {
+              throw new Error(`No results found`);
+          }
+      } catch (err) {
+          res.status(500).json({error:`Encountered an error getting links: ${err}`});
+      }
+  });
+
+  this.router.post('/deleteLink', async (req, res) => {
+    const {linkId} = req.body;
+
+    if(linkId == null) {
+        res.status(400).json({error:"Must provide linkId"});
+        return;
+    }
+
+    try {
+        let x = this.links.delete(linkId)
+        if(x) {
+          res.status(200).json({count:1});
+        } else {
+          res.status(400).json({error:"No records to delete"});
+        }
+    } catch (err) {
+        res.status(500).json({error:`Encountered an error deleting link ${linkId}: ${err}`});
+    }
+    });
   }
+
+  
+  
 }
 
+
 export const api = new Api();
+
+
