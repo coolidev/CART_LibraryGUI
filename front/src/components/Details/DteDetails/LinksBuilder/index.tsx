@@ -79,6 +79,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 			backgroundColor: '#e34747'
 		}
 	},
+	saveModalButton: {
+		color: '#e34747'
+	},
 	rotationRight: {
 		transform: 'rotate(90deg)',
 		marginTop: '1.5rem',
@@ -394,8 +397,8 @@ const LinksBuilder: FC<LinksBuilderProps> = ({
 					/>
 				</DialogContent>
 				<DialogActions>
-					<Button onClick={handleCloseSaveDialog}>Cancel</Button>
-					<Button onClick={handleSave}>Add</Button>
+					<Button onClick={handleCloseSaveDialog} className={classes.saveModalButton}>Cancel</Button>
+					<Button onClick={handleSave} className={classes.saveModalButton}>Add</Button>
 				</DialogActions>
 			</Dialog>
 		</div>
