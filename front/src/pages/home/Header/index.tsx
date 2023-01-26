@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingTop: '8vh'
   },
   toolbar: {
-    minHeight: '7.2vh',
+    minHeight: '60px',
     backgroundColor: theme.palette.background.header
   },
   link: {

@@ -81,8 +81,8 @@ const Network: FC<NetworkProps> = ({
       style={{
         minHeight:
           isCollapsed === 'up'
-            ? (window.screen.availHeight / zoom) * 0.855
-            : isCollapsed !== 'down' && (window.screen.availHeight / zoom) * 0.3
+            ? window.innerHeight - 60 - 2 // header, border
+            : isCollapsed !== 'down' && window.innerHeight - 60 - 480
       }}
     >
       <Box display="flex" alignItems="center">

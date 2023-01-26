@@ -30,7 +30,8 @@ export const updateZoom =
   (): AppThunk =>
   async (dispatch) => {
     const isFullScreen = (window.screen.availHeight || window.screen.height - 30) <= window.innerHeight;
-    const zoom = (window.outerWidth / window.innerWidth + (isFullScreen ? 0.01 : 0));
+    // const zoom = (window.outerWidth / window.innerWidth + (isFullScreen ? 0.01 : 0));
+    const zoom = (window.outerWidth / window.innerWidth);
     dispatch(slice.actions.updateZoom({ zoom: zoom }));
   };
 
