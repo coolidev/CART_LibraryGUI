@@ -251,10 +251,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   inputPanel: {
   },
   sideBar: {
-    width: '60px',
+    // width: '60px',
   },
   quickAccess: {
-    width: '400px',
+    // width: '400px',
     // height: '757px'
   }
 }));
@@ -765,6 +765,7 @@ const Home: FC = () => {
                 item
                 className={classes.sideBar}
                 style={{
+                  width: 60 / zoom,
                   // width: (window.screen.availHeight / zoom) * 0.06,
                   backgroundColor: theme.palette.background.dark
                 }}
@@ -778,6 +779,7 @@ const Home: FC = () => {
                 item
                 className={classes.quickAccess}
                 style={{
+                  width: 400 / zoom,
                   // width: (window.screen.availHeight / zoom) * 0.42,
                   backgroundColor: theme.palette.background.main,
                   minHeight: window.innerHeight - 60
@@ -808,9 +810,9 @@ const Home: FC = () => {
               //     (window.screen.availHeight / zoom) * 0.96
               //   : 0
               width: collapsed
-                  ? window.innerWidth - 10 - 460 - 30
+                  ? window.innerWidth - 10 - 460 / zoom - 30 / zoom
                   : resultTab !== 'compare'
-                  ? window.innerWidth - 10 - 460 - 460 - 30
+                  ? window.innerWidth - 10 - 460 / zoom - 460 / zoom - 30 / zoom
                   : 0
             }}
           >
@@ -873,21 +875,21 @@ const Home: FC = () => {
               //     : (window.screen.availHeight / zoom) * 0.48
               width: resultTab === 'compare'
                 ? collapsed
-                  ? 30
-                  : window.innerWidth - 10 - 60 - 400
+                  ? 30 / zoom
+                  : window.innerWidth - 10 - 60 / zoom - 400 / zoom
                 : collapsed
-                  ? 30
-                  : 460 + 30
+                  ? 30 / zoom
+                  : 460 / zoom + 30 / zoom
             }}
           >
             <Results
               width={resultTab === 'compare'
                 ? collapsed
-                  ? 30
-                  : window.innerWidth - 10 - 60 - 400
+                  ? 30 / zoom
+                  : window.innerWidth - 10 - 60 / zoom - 400 / zoom
                 : collapsed
-                  ? 30
-                  : 460 + 30}
+                  ? 30 / zoom
+                  : 460 / zoom + 30 / zoom}
               // width={resultTab === 'compare'
               //   ? collapsed
               //     ? (window.screen.availHeight / zoom) * 0.03
