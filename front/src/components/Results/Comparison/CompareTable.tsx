@@ -109,7 +109,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   root: {
     margin: theme.spacing(3),
     overflowY: 'hidden',
-    overflowX: 'hidden'
+    overflowX: 'scroll'
   },
   table: {
     '& .MuiTableCell-root': {

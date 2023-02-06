@@ -225,6 +225,7 @@ a:hover {
 /* width */
 ::-webkit-scrollbar {
   width: 5px;
+  height: 5px;
 }
 html, body, div {
   scrollbar-width: thin;

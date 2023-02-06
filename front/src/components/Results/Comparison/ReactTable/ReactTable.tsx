@@ -22,7 +22,8 @@ interface Props<T> {
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
-    width: '100%'
+    width: '100%',
+    minWidth: '600px',
   }
 }));
 
