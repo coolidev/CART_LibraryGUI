@@ -55,12 +55,12 @@ export function ReactTableRowCell<T>({ item, column, index }: Props<T>): JSX.Ele
   return (<>
       <td id={isRowHeader && `context-menu-${index}`}>
         {column.render ? column.render(column, item) : value}
+        {isRowHeader && <ContextMenu
+          dataSource={contextItems}
+          width={200}
+          target={`#context-menu-${index}`}
+          onItemClick={handleSelectOption} />}
       </td>
-      <ContextMenu
-        dataSource={contextItems}
-        width={200}
-        target={`#context-menu-${index}`}
-        onItemClick={handleSelectOption} />
     </>
   );
 }
