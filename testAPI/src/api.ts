@@ -1812,6 +1812,154 @@ export class Api {
     this.router.post("/requestComparison", async (req, res) => {
       const { project } = req.body;
       const result = {
+        tableStructure: {
+          group: [
+            {
+              info: null,
+              name: "Parameters",
+              items: [
+                {
+                  name: "Altitude (km)",
+                  key: "key1",
+                  rowBreakdownOptions: ["option1"]
+                },
+                {
+                  name: "Inclination (deg)",
+                  key: "key2",
+                  rowBreakdownOptions: []
+                }
+              ]
+            },
+            {
+              info: null,
+              name: "Performance",
+              items: [
+                {
+                  name: "RF Coverage (%)",
+                  key: "key3",
+                  rowBreakdownOptions: []
+                },
+                {
+                  name: "Mean Number of RF Contacts Per Orbit",
+                  key: "key4",
+                  rowBreakdownOptions: []
+                },
+                {
+                  name: "Mean RF Contact Duration (seconds)",
+                  key: "key5",
+                  rowBreakdownOptions: []
+                },
+                {
+                  name: "Average Gap (minutes)",
+                  key: "key6",
+                  rowBreakdownOptions: []
+                },
+                {
+                  name: "Max RF Coverage Gap (minutes)",
+                  key: "key7",
+                  rowBreakdownOptions: []
+                },
+                {
+                  name: "Mean Response Time (seconds)",
+                  key: "key8",
+                  rowBreakdownOptions: []
+                },
+                {
+                  name: "Effective Comms Time (%)",
+                  key: "key9",
+                  rowBreakdownOptions: []
+                },
+                {
+                  name: "Data Rate (kbps)",
+                  key: "key10",
+                  rowBreakdownOptions: []
+                },
+                {
+                  name: "Throughput (Gb/day)",
+                  key: "key11",
+                  rowBreakdownOptions: []
+                },
+              ]
+            },
+            {
+              info: null,
+              name: "User Burden: Antenna Options",
+              items: [
+                {
+                  name: "User EIRP (dBW)",
+                  key: "key12",
+                  rowBreakdownOptions: []
+                },
+                {
+                  name: "Parabolic Antenna Diameter (m)",
+                  key: "key13",
+                  rowBreakdownOptions: []
+                },
+                {
+                  name: "Parabolic Antenna Mass (kg)",
+                  key: "key14",
+                  rowBreakdownOptions: []
+                },
+                {
+                  name: "Electronically Steerable Antenna Size (m2)",
+                  key: "key15",
+                  rowBreakdownOptions: []
+                },
+                {
+                  name: "Helical Antenna Height (m)",
+                  key: "key16",
+                  rowBreakdownOptions: []
+                },
+                {
+                  name: "Patch Antenna Size (m2)",
+                  key: "key17",
+                  rowBreakdownOptions: []
+                },
+                {
+                  name: "Dipole Antenna Size (m)",
+                  key: "key18",
+                  rowBreakdownOptions: []
+                },
+              ]
+            },
+            {
+              info: null,
+              name: "Nav and Tracking",
+              items: [
+                {
+                  name: "Tracking Accuracy (m)",
+                  key: "key19",
+                  rowBreakdownOptions: []
+                },
+                {
+                  name: "GNSS Availability",
+                  key: "key20",
+                  rowBreakdownOptions: []
+                }
+              ]
+            }
+          ],
+          rowBreakdownOptions: [
+            {
+              key: "option1",
+              name: "Option 1",
+              action: `function (rowKey) { alert(rowKey); }`
+            }
+          ]
+        },
+        columnData: [
+          {
+            name: "Project 1",
+            key: "project1",
+            data: []
+          },
+          {
+            name: "Project 2",
+            key: "project2",
+            data: []
+          }
+        ],
+        columnSequence: [],
         dataIDs: [
           { networkId: 9, system_attribute_version_id: 1 },
           { networkId: 3, system_attribute_version_id: 3 },
