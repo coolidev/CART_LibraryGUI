@@ -1,3 +1,5 @@
+import { makeStyles, Theme } from "@material-ui/core";
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import { ContextMenu } from "devextreme-react";
 import lodash from "lodash";
 import { useEffect, useState } from "react";
@@ -22,7 +24,13 @@ interface IContextItem {
   action: string;
 }
 
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+  }
+}));
+
 export function ReactTableRowCell<T>({ item, column, index }: Props<T>): JSX.Element {
+  const classes = useStyles();
   const [options, setOptions] = useState<Option[]>()
   const [contextItems, setContextItems] = useState<IContextItem[]>([])
   const [isRowHeader, setIsRowHeader] = useState<boolean>(false)
@@ -53,13 +61,19 @@ export function ReactTableRowCell<T>({ item, column, index }: Props<T>): JSX.Ele
   }
   
   return (<>
-      <td id={isRowHeader && `context-menu-${index}`}>
+      <td id={isRowHeader && `context-menu-${index}`} className={classes.root}
+        style={{
+          fontSize: lodash.get(item, 'isGroup') === true ? '1.25rem' : '0.875rem',
+        }}>
         {column.render ? column.render(column, item) : value}
-        {isRowHeader && <ContextMenu
-          dataSource={contextItems}
-          width={200}
-          target={`#context-menu-${index}`}
-          onItemClick={handleSelectOption} />}
+        {isRowHeader && contextItems.length > 0 && <>
+          <ArrowDropDownIcon />
+          <ContextMenu
+            dataSource={contextItems}
+            width={200}
+            target={`#context-menu-${index}`}
+            onItemClick={handleSelectOption} />
+          </>}
       </td>
     </>
   );

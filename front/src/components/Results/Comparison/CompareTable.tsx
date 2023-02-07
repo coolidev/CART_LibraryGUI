@@ -41,6 +41,7 @@ interface IRowType<T> {
   key: string;
   name: string;
   rowBreakdownOptions?: string[];
+  isGroup?: boolean;
   height?: number;
   render?: (row: IRowType<T>, item: T) => void;
 }
@@ -56,6 +57,7 @@ interface ICellType<T> {
   key: string;
   colKey: string;
   value: string;
+  isGroup?: boolean;
   rowBreakdownOptions?: IRowBreakdownOption<IData>[];
   render?: (cell: ICellType<T>, item: T) => void;
 }
@@ -278,7 +280,8 @@ const CompareTable: FC<CompareTableProps> = ({
         return [
           {
             name: group.name,
-            key: `group_${idx}`
+            key: `group_${idx}`,
+            isGroup: true
           }, ...group.items];
       }).flat();
       setRowNames(rows);
@@ -293,6 +296,7 @@ const CompareTable: FC<CompareTableProps> = ({
             key: row.key,
             colKey: "comparison",
             value: row.name,
+            isGroup: row.isGroup,
             rowBreakdownOptions: row.rowBreakdownOptions
                   ? row.rowBreakdownOptions
                     .map((key) => (rowBreakdownOptions.filter((option) => option.key === key)[0]))
@@ -321,7 +325,8 @@ const CompareTable: FC<CompareTableProps> = ({
           row.filter(cell => cell !== undefined).map((cell) => {
             grouped = {
               ...grouped,
-              [cell.colKey]: cell.value
+              [cell.colKey]: cell.value,
+              isGroup: cell.isGroup
             }
             return { [cell.colKey]: cell.value }
           })
