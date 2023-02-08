@@ -4,108 +4,17 @@ import {
   colors,
   useTheme
 } from '@material-ui/core';
-import { Pagination } from '@material-ui/lab';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import KeyBoardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
-import CheckOutlinedIcon from '@material-ui/icons/CheckOutlined';
-import ClearOutlinedIcon from '@material-ui/icons/ClearOutlined';
-import Delete from '@material-ui/icons/Delete';
-import { useSelector, useDispatch } from 'src/store';
-import { updatePreference } from 'src/slices/preference';
-import { AccordionSummary } from 'src/components/Results/StyledAccordion';
 import type { State } from 'src/pages/home';
-import type { Status } from 'src/pages/home/Results/Comparison';
-import type { ICompare } from 'src/types/comparison';
-import { THEMES } from 'src/utils/constants/general';
-import { TooltipList } from 'src/utils/constants/tooltips';
-import { USER_BURDEN_KEYS } from 'src/utils/constants/analysis';
-import { addComma, parseComma } from 'src/utils/util';
-import Menu from 'devextreme-react/menu';
+import type { ICellType, IColumnType, IComparisonType, IData, IRowBreakdownOption, IRowType, Status } from 'src/types/comparison';
 import type { Theme } from 'src/theme';
 import { ReactTable } from './ReactTable/ReactTable';
 import axios from "src/utils/axios";
 
-interface IData {
-  [key: string]: string;
-}
-
-interface IColumnType<T> {
-  key: string;
-  name: string;
-  removeEnabled?: boolean;
-  width?: number;
-  render?: (column: IColumnType<T>, item: T) => void;
-}
-
-interface IRowType<T> {
-  key: string;
-  name: string;
-  rowBreakdownOptions?: string[];
-  isGroup?: boolean;
-  height?: number;
-  render?: (row: IRowType<T>, item: T) => void;
-}
-
-export interface IRowBreakdownOption<T> {
-  key: string;
-  name: string;
-  action: Function;
-  render?: (option: IRowBreakdownOption<T>, item: T) => void;
-}
-
-interface ICellType<T> {
-  key: string;
-  colKey: string;
-  value: string;
-  isGroup?: boolean;
-  rowBreakdownOptions?: IRowBreakdownOption<IData>[];
-  render?: (cell: ICellType<T>, item: T) => void;
-}
-
 interface CompareTableProps {
   state: State;
   status: Status;
-  result: ICompare;
-  source: ICompare;
-  rankState: boolean;
-  onStatus: (values) => void;
-  onModal: (values) => void;
-  onResult: (values: ICompare) => void;
-  onSelect: (index: number) => void;
-  handlePlotOptions: (name: string, value: boolean) => void;
+  source: IComparisonType;
 }
-
-interface IAccordion {
-  [key: string]: boolean;
-}
-
-const initialAccordion: IAccordion = {
-  'table-group-Parameters': true,
-  'table-group-Nav and Tracking': true,
-  'table-group-Performance': true,
-  'table-group-Ranking': true,
-  'table-group-User Burden: Antenna Options': true,
-  'table-group-User Burden: Mission Impacts': true
-};
-
-const DEEP_DIVE_PARAMS = [
-  'Effective Comms Time (%)',
-  'RF Coverage (%)',
-  'Average Gap (minutes)',
-  'Tracking Rate (deg/s)',
-  'Slew Rate (deg/s)',
-  'Pointing-Adjusted RF Coverage (%)',
-  'Mean Number of RF Contacts Per Orbit',
-  'Mean RF Contact Duration (seconds)',
-  'Max RF Coverage Gap (minutes)',
-  'Mean Response Time (seconds)',
-  'RF Coverage (minutes/day)',
-  'Contacts Per Day',
-  'Average Contact Duration (minutes)',
-  'Max Coverage Duration (minutes)',
-  'Max Gap (minutes)',
-  'Mean Response Time (minutes)'
-];
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -165,48 +74,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-interface IGroupItem {
-  name: string;
-  key: string;
-  rowBreakdownOptions: string[];
-}
-interface IGroup {
-  name: string;
-  info: string | null;
-  items: IGroupItem[];
-}
-interface ITableStructure {
-  group: IGroup[];
-  rowBreakdownOptions: IRowBreakdownOption<IData>[]
-}
-interface IColumnData {
-  name: string;
-  key: string;
-  data: IData[]
-}
-interface IComparisonType {
-  tableStructure: ITableStructure;
-  columnData: IColumnData[];
-  columnSequence: string[]
-}
-
 const CompareTable: FC<CompareTableProps> = ({
   state,
   status,
-  result,
   source,
-  rankState,
-  onStatus,
-  onModal,
-  onResult,
-  onSelect,
-  handlePlotOptions
 }) => {
   const classes = useStyles();
   const theme = useTheme<Theme>();
-  
-  const [initialData, setInitialData] = useState<IComparisonType>()
-  
+
   const [columns, setColumns] = useState<IColumnType<IData>[]>([])
   const [rowNames, setRowNames] = useState<IRowType<IData>[]>([])
   const [rowBreakdownOptions, setRowBreakdownOptions] = useState<IRowBreakdownOption<IData>[]>([])
@@ -240,27 +115,9 @@ const CompareTable: FC<CompareTableProps> = ({
   }
 
   useEffect(() => {
-    const initializeData = async () => {
-      try {
-				const params = {
-				};
-        
-        const initialData = await axios.post<IComparisonType>('/requestComparison', params);
-
-        setInitialData(initialData.data)
-      }
-      catch (e) {
-        console.log(e)
-        throw e;
-      }
-    }
-    initializeData();
-  }, [])
-
-  useEffect(() => {
-    if (initialData !== undefined) {
+    if (source !== undefined) {
       // Columns
-      const columnData = initialData.columnData
+      const columnData = source.columnData
       const columnsBuffer = [
         { key: 'comparison', name: "" },
         ...columnData.map((column) => {
@@ -269,13 +126,13 @@ const CompareTable: FC<CompareTableProps> = ({
       ]
       setColumns(columnsBuffer);
       // Column sequence
-      const sequenceData = initialData.columnSequence;
+      const sequenceData = source.columnSequence;
       setSortString(sequenceData.toString());
       // Row Breakdown options
-      const optionsData = initialData.tableStructure.rowBreakdownOptions;
+      const optionsData = source.tableStructure.rowBreakdownOptions;
       setRowBreakdownOptions(optionsData);
       // Row names
-      const rowData = initialData.tableStructure.group;
+      const rowData = source.tableStructure.group;
       const rows = rowData.map((group, idx) => {
         return [
           {
@@ -286,7 +143,7 @@ const CompareTable: FC<CompareTableProps> = ({
       }).flat();
       setRowNames(rows);
     }
-  }, [initialData])
+  }, [source])
 
   useEffect(() => {
     const handleData = () => {
@@ -304,7 +161,7 @@ const CompareTable: FC<CompareTableProps> = ({
           }
         })
         // fetch data initially
-        const columnData = initialData.columnData.map((column) => {
+        const columnData = source.columnData.map((column) => {
           return column.data.map((row: IData): ICellType<IData> => {
             return {
               key: row.key,
@@ -343,10 +200,10 @@ const CompareTable: FC<CompareTableProps> = ({
         // setCellData(columnData)
       }
     }
-    if (initialData !== undefined) {
+    if (source !== undefined) {
       handleData()
     }
-  }, [initialData, columns, rowNames, rowBreakdownOptions, cellData, pageLoaded])
+  }, [source, columns, rowNames, rowBreakdownOptions, cellData, pageLoaded])
 
   useEffect(() => {
     if (cellData.length) {
