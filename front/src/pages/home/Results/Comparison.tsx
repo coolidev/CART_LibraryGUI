@@ -102,6 +102,10 @@ const Comparison: FC<ComparisonProps> = ({ state, onState, visible }) => {
         const fetchInitialData = await axios.post<IComparisonType>('/requestComparison', params);
 
         setInitialData(fetchInitialData.data)
+        setStatus((prevState) => ({
+          ...prevState,
+          page: Math.ceil(fetchInitialData.data.columnData.length / status.perPage)
+        }))
       }
       catch (e) {
         console.log(e)
