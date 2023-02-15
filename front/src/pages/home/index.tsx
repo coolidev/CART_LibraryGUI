@@ -782,7 +782,8 @@ const Home: FC = () => {
                   width: 400 / zoom,
                   // width: (window.screen.availHeight / zoom) * 0.42,
                   backgroundColor: theme.palette.background.main,
-                  minHeight: window.innerHeight - 60
+                  minHeight: window.innerHeight - 60,
+                  maxHeight: window.innerHeight - 60
                   // height: window.screen.availHeight *(.86/zoom)
                 }}
               >
