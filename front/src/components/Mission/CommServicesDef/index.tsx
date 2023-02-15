@@ -29,6 +29,7 @@ import CommsPayloadSpecDialog from './CommsPayloadSpecsDialog';
 import axios from 'src/utils/axios';
 import { TooltipList } from 'src/utils/constants/tooltips';
 import { ArrowDropDown, HighlightOff as ClearIcon } from '@material-ui/icons';
+import { Autocomplete } from '@material-ui/lab';
 
 interface ConstraintsProps {
 	state: State;
@@ -76,7 +77,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 	interiorBox: {
 		backgroundColor: theme.palette.component.main
 	},
-	select: {
+	enhanceDropdown: {
 		padding: 0,
 		//boxShadow: theme.name == THEMES.DARK? '' :'3px 3px 7px #c0c0c0', --To be added back when we make shadows everywhere
 		borderRadius: '4px',
@@ -84,6 +85,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 		color: `${theme.palette.text.primary} !important`,
 		'& .MuiSelect-iconOutlined': {
 			color: theme.palette.border.main
+		}
+	},
+	selectedEnhanceDropdown: {
+		'& .MuiAutocomplete-clearIndicator': {
+			visibility: 'inherit'
 		}
 	},
 	header: {
@@ -167,6 +173,26 @@ const CommServicesDef: FC<ConstraintsProps> = ({ state, bounds, onChange, accord
 			onChange({ name, value: parseFloat(value), category: 'constraints' });
 		}
 	};
+
+	const handleFreqBandChange = (event, value, reason) => {
+		let newValue;
+		if (reason === 'select-option') {
+			newValue = value['id']
+		}
+		if (reason === 'clear') {
+			newValue = -1
+		}
+		onChange({ name: "freqBandFilter", value: parseFloat(newValue), category: 'constraints' });
+	}
+
+	const handleStdCompChange = (event, value, reason) => {
+		if (reason === 'select-option') {
+			setStdComp(value['id'])
+		}
+		if (reason === 'clear') {
+			setStdComp(0)
+		}
+	}
 
 	return (
 		<>
@@ -351,24 +377,18 @@ const CommServicesDef: FC<ConstraintsProps> = ({ state, bounds, onChange, accord
 								</Grid>
 								<Grid item md={5}>
 									<FormControl variant="filled" size="small" fullWidth>
-										<Select
-											className={classes.select}
-											name="freqBandFilter"
-											variant="outlined"
-											data-filter-network="true"
-											value={freqBandSelection}
+										<Autocomplete
+											options={freqBandOptions}
+											getOptionLabel={(option) => option.name}
+											renderInput={(params) => <TextField {...params} placeholder="---" variant="outlined" />}
 											color="primary"
-											onChange={handleClick}
+											size='small'
+											className={`${classes.enhanceDropdown} ${freqBandSelection !== -1 && classes.selectedEnhanceDropdown}`}
+											forcePopupIcon={freqBandSelection !== -1 ? false : true}
 											style={{ textAlign: 'center' }}
-											IconComponent={props => freqBandSelection === -1 ? (
-												<ArrowDropDown {...props} className={`material-icons ${props.className}`} />
-											) : <IconButton size='small' onClick={() => { setFreqBandSelection(-1) }}><ClearIcon /></IconButton>}
-										>
-											<MenuItem value={-1}>---</MenuItem>
-											{freqBandOptions.map((option) => {
-												return <MenuItem value={option.id}>{option.name}</MenuItem>
-											})}
-										</Select>
+											onChange={handleFreqBandChange}
+											openOnFocus={true}
+										/>
 									</FormControl>
 								</Grid>
 								<Grid item md={7}>
@@ -409,27 +429,24 @@ const CommServicesDef: FC<ConstraintsProps> = ({ state, bounds, onChange, accord
 								</Grid>
 								<Grid item md={5}>
 									<FormControl variant="filled" size="small" fullWidth>
-										<Select
-											className={classes.select}
-											name="type"
-											variant="outlined"
-											data-filter-network="true"
-											value={stdComp}
+										<Autocomplete
+											options={[{ id: 1, name: "CCSDS" }, { id: 2, name: "DVB-S2" }]}
+											getOptionLabel={(option) => option.name}
+											renderInput={(params) => {
+												return (<TextField {...params} placeholder="---" variant="outlined" />)
+											}}
 											color="primary"
-											onChange={(e) => { setStdComp(e.target.value as number) }}
+											size='small'
+											className={`${classes.enhanceDropdown} ${stdComp !== 0 && classes.selectedEnhanceDropdown}`}
+											forcePopupIcon={stdComp !== 0 ? false : true}
 											style={{ textAlign: 'center' }}
-											IconComponent={props => stdComp === 0 ? (
-												<ArrowDropDown {...props} className={`material-icons ${props.className}`} />
-											) : <IconButton size='small' onClick={() => { setStdComp(0) }}><ClearIcon /></IconButton>}
-										>
-											<MenuItem value={0}>---</MenuItem>
-											<MenuItem value={1}>CCSDS</MenuItem>
-											<MenuItem value={2}>DVB-S2</MenuItem>
-										</Select>
+											onChange={handleStdCompChange}
+											openOnFocus={true}
+										/>
 									</FormControl>
 								</Grid>
 								<Grid item sm={12} />
-								<Grid container justify="center" alignItems="center" spacing={2}>
+								<Grid container justifyContent="center" alignItems="center" spacing={2}>
 									<Grid item md={8}>
 										<Button
 											name="Comms Payload Specs"
