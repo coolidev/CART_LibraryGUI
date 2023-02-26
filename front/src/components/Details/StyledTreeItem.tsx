@@ -148,7 +148,7 @@ export const StyledTreeItem = withStyles((theme: Theme) =>
       borderLeft: `1px dashed ${fade(theme.palette.text.primary, 0.4)}`
     }
   })
-)((props: StyledTreeItemProps & { relations?: string[], onRelationCLick?: Function, onRelationEject?: Function, relationHoldID?: number }) => {
+)((props: StyledTreeItemProps & { relations?: string[], onRelationCLick?: Function, onRelationEject?: Function, relationHoldIDs?: string[] }) => {
   const {
     nodeId,
     labelText,
@@ -159,7 +159,7 @@ export const StyledTreeItem = withStyles((theme: Theme) =>
     relations,
     onRelationCLick,
     onRelationEject,
-    relationHoldID,
+    relationHoldIDs,
     ...rest
   } = props;
   const classes = useStyles();
@@ -168,18 +168,18 @@ export const StyledTreeItem = withStyles((theme: Theme) =>
     const properties = relation.split('_')
     if (properties[1] === 'output') {
       if (properties[0] === 'down') {
-        return <OutputDownIcon className={`${properties[2] === relationHoldID.toString() ? classes.onHoldRelationIcon : classes.relationIcon}`} onMouseDown={() => {onRelationCLick(properties[2])}} onMouseUp={() => {onRelationEject()}} onMouseLeave={() => {onRelationEject()}} />
+        return <OutputDownIcon className={`${relationHoldIDs?.includes(properties[2]) ? classes.onHoldRelationIcon : classes.relationIcon}`} onMouseDown={() => {onRelationCLick(properties[2])}} onMouseUp={() => {onRelationEject()}} onMouseLeave={() => {onRelationEject()}} />
       }
       if (properties[0] === 'up') {
-        return <OutputUpIcon className={`${properties[2] === relationHoldID.toString() ? classes.onHoldRelationIcon : classes.relationIcon}`} onMouseDown={() => {onRelationCLick(properties[2])}} onMouseUp={() => {onRelationEject()}} onMouseLeave={() => {onRelationEject()}} />
+        return <OutputUpIcon className={`${relationHoldIDs?.includes(properties[2]) ? classes.onHoldRelationIcon : classes.relationIcon}`} onMouseDown={() => {onRelationCLick(properties[2])}} onMouseUp={() => {onRelationEject()}} onMouseLeave={() => {onRelationEject()}} />
       }
     }
     if (properties[1] === 'input') {
       if (properties[0] === 'down') {
-        return <InputDownIcon className={`${properties[2] === relationHoldID.toString() ? classes.onHoldRelationIcon : classes.relationIcon}`} onMouseDown={() => {onRelationCLick(properties[2])}} onMouseUp={() => {onRelationEject()}} onMouseLeave={() => {onRelationEject()}} />
+        return <InputDownIcon className={`${relationHoldIDs?.includes(properties[2]) ? classes.onHoldRelationIcon : classes.relationIcon}`} onMouseDown={() => {onRelationCLick(properties[2])}} onMouseUp={() => {onRelationEject()}} onMouseLeave={() => {onRelationEject()}} />
       }
       if (properties[0] === 'up') {
-        return <InputUpIcon className={`${properties[2] === relationHoldID.toString() ? classes.onHoldRelationIcon : classes.relationIcon}`} onMouseDown={() => {onRelationCLick(properties[2])}} onMouseUp={() => {onRelationEject()}} onMouseLeave={() => {onRelationEject()}} />
+        return <InputUpIcon className={`${relationHoldIDs?.includes(properties[2]) ? classes.onHoldRelationIcon : classes.relationIcon}`} onMouseDown={() => {onRelationCLick(properties[2])}} onMouseUp={() => {onRelationEject()}} onMouseLeave={() => {onRelationEject()}} />
       }
     }
   })
