@@ -185,7 +185,7 @@ const QuickAccess: FC<QuickAccessProps> = ({
         overflowX: 'hidden'
       }}
     >
-      <Grid container justify="center" spacing={3}>
+      <Grid container justifyContent="center" spacing={3}>
         <Grid item md={12}>
           <Box m={2}>
             <Typography

@@ -9,7 +9,7 @@ interface LayoutProps {
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     margin: 0,
-    paddingTop: '7vh'
+    paddingTop: '60px'
   }
 }));
 

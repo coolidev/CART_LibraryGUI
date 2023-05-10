@@ -1,0 +1,19 @@
+version: '1.0'
+
+networks:
+  app-network:
+    driver: bridge
+
+services:
+  athana:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    container_name: athana
+    # restart: always
+    ports:
+      - 5000:5000
+    # volumes:
+    #   - .:/usr/app:delegated
+    networks:
+      - app-network

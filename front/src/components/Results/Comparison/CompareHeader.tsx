@@ -1,15 +1,12 @@
 import { FC } from 'react';
 import { Box, Button, makeStyles } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
-import type { Status } from 'src/pages/home/Results/Comparison';
 import type { Theme } from 'src/theme';
 import { THEMES } from 'src/utils/constants/general';
+import { Status } from 'src/types/comparison';
 
 interface CompareHeaderProps {
-  result: string[][];
-  file: string;
   status: Status;
-  rankState: boolean;
   onStatus: (values) => void;
   handleDialog: () => void;
   disabled: boolean;
@@ -45,10 +42,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const CompareHeader: FC<CompareHeaderProps> = ({
-  file,
-  result,
   status,
-  rankState,
   disabled,
   onStatus,
   handleDialog

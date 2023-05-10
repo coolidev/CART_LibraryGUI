@@ -221,3 +221,24 @@ a:hover {
 .js-plotly-plot .plotly .main-svg .legend {
   transform: translate(150px, 440px);
 }
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+html, body, div {
+  scrollbar-width: thin;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

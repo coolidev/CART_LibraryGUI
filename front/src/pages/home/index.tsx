@@ -2,7 +2,7 @@
 import { FC, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'src/utils/axios';
-import { Box, Grid, colors, useTheme } from '@material-ui/core';
+import { Box, Grid, colors, useTheme, makeStyles } from '@material-ui/core';
 import useSettings from 'src/hooks/useSettings';
 import { useAuth, useSMS } from 'src/hooks/useAuth';
 import { Welcome } from 'src/components/Modals';
@@ -247,11 +247,27 @@ const initialBounds = {
   }
 };
 
+const useStyles = makeStyles((theme: Theme) => ({
+  inputPanel: {
+  },
+  sideBar: {
+    // width: '60px',
+  },
+  quickAccess: {
+    // width: '400px',
+    // height: '757px'
+  }
+}));
+
+
 const Home: FC = () => {
   const dispatch = useDispatch();
   const theme = useTheme<Theme>();
   const { zoom } = useSelector((state) => state.zoom);
   const { settings } = useSettings();
+
+  const classes = useStyles(theme);
+
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isSaveViewOpen, setIsSaveViewOpen] = useState(false);
   const [isSavingNetwork, setIsSavingNetwork] = useState(false);
@@ -732,53 +748,73 @@ const Home: FC = () => {
         <NavBar onClose={() => setOpen(false)} open={isOpen} openIntro={() => {setIntroVisible(!introVisible)}} />
         <Grid
           container
-          justify="center"
+          justifyContent='center'
           style={{
-            width: window.screen.availWidth / zoom,
-            minHeight: (window.screen.availHeight / zoom) * 0.82
+            width: window.innerWidth - 10,
+            minHeight: window.innerHeight - 60,
+            // width: window.screen.availWidth / zoom,
+            // minHeight: (window.screen.availHeight / zoom) * 0.82
           }}
         >
           <Grid
             item
-            style={{
-              width: (window.screen.availHeight / zoom) * 0.06,
-              backgroundColor: theme.palette.background.dark
-            }}
+            className={classes.inputPanel}
           >
-            <SideBar
-              currentTab={currentTab}
-              onCurrentTab={handleCurrentTab}
-            />
+            <Grid container>
+              <Grid
+                item
+                className={classes.sideBar}
+                style={{
+                  width: 60 / zoom,
+                  // width: (window.screen.availHeight / zoom) * 0.06,
+                  backgroundColor: theme.palette.background.dark
+                }}
+              >
+                <SideBar
+                  currentTab={currentTab}
+                  onCurrentTab={handleCurrentTab}
+                />
+              </Grid>
+              <Grid
+                item
+                className={classes.quickAccess}
+                style={{
+                  width: 400 / zoom,
+                  // width: (window.screen.availHeight / zoom) * 0.42,
+                  backgroundColor: theme.palette.background.main,
+                  minHeight: window.innerHeight - 60,
+                  maxHeight: window.innerHeight - 60
+                  // height: window.screen.availHeight *(.86/zoom)
+                }}
+              >
+                <QuickAccess
+                  currentTab={currentTab}
+                  cache={cache}
+                  state={state}
+                  bounds={bounds}
+                  onCache={handleCache}
+                  onState={handleState}
+                  networkPanelStatus={isCollapsed}
+                  resultPanelCollapsed={collapsed}
+                />
+              </Grid>
+            </Grid>
           </Grid>
           <Grid
             item
             style={{
-              width: (window.screen.availHeight / zoom) * 0.42,
-              backgroundColor: theme.palette.background.main,
-              height: window.screen.availHeight *(.86/zoom)
-            }}
-          >
-            <QuickAccess
-              currentTab={currentTab}
-              cache={cache}
-              state={state}
-              bounds={bounds}
-              onCache={handleCache}
-              onState={handleState}
-              networkPanelStatus={isCollapsed}
-              resultPanelCollapsed={collapsed}
-            />
-          </Grid>
-          <Grid
-            item
-            style={{
+              // width: collapsed
+              //   ? window.screen.availWidth / zoom -
+              //     (window.screen.availHeight / zoom) * 0.51
+              //   : resultTab !== 'compare'
+              //   ? window.screen.availWidth / zoom -
+              //     (window.screen.availHeight / zoom) * 0.96
+              //   : 0
               width: collapsed
-                ? window.screen.availWidth / zoom -
-                  (window.screen.availHeight / zoom) * 0.51
-                : resultTab !== 'compare'
-                ? window.screen.availWidth / zoom -
-                  (window.screen.availHeight / zoom) * 0.96
-                : 0
+                  ? window.innerWidth - 10 - 460 / zoom - 30 / zoom
+                  : resultTab !== 'compare'
+                  ? window.innerWidth - 10 - 460 / zoom - 460 / zoom - 30 / zoom
+                  : 0
             }}
           >
             <Box
@@ -786,20 +822,26 @@ const Home: FC = () => {
                 backgroundColor: theme.palette.background.light,
                 minHeight:
                   isCollapsed === 'down'
-                    ? (window.screen.availHeight / zoom) * 0.785
+                    ? 800
                     : isCollapsed === 'up'
                     ? 0
-                    : (window.screen.availHeight / zoom) * 0.485
+                    : 480
+                // minHeight:
+                //   isCollapsed === 'down'
+                //     ? (window.screen.availHeight / zoom) * 0.785
+                //     : isCollapsed === 'up'
+                //     ? 0
+                //     : (window.screen.availHeight / zoom) * 0.485
               }}
             >
               <Visualizer
                 state={state}
                 height={
                   isCollapsed === 'down'
-                    ? (window.screen.availHeight / zoom) * 0.785
+                    ? 800
                     : isCollapsed === 'up'
                     ? 0
-                    : (window.screen.availHeight / zoom) * 0.485
+                    : 480
                 }
               />
             </Box>
@@ -823,26 +865,40 @@ const Home: FC = () => {
             item
             style={{
               backgroundColor: theme.palette.background.main,
-              width:
-                resultTab === 'compare'
-                  ? collapsed
-                    ? (window.screen.availHeight / zoom) * 0.03
-                    : window.screen.availWidth / zoom -
-                      (window.screen.availHeight / zoom) * 0.48
-                  : collapsed
-                  ? (window.screen.availHeight / zoom) * 0.03
-                  : (window.screen.availHeight / zoom) * 0.48
+              // width:
+              //   resultTab === 'compare'
+              //     ? collapsed
+              //       ? (window.screen.availHeight / zoom) * 0.03
+              //       : window.screen.availWidth / zoom -
+              //         (window.screen.availHeight / zoom) * 0.48
+              //     : collapsed
+              //     ? (window.screen.availHeight / zoom) * 0.03
+              //     : (window.screen.availHeight / zoom) * 0.48
+              width: resultTab === 'compare'
+                ? collapsed
+                  ? 30 / zoom
+                  : window.innerWidth - 10 - 60 / zoom - 400 / zoom
+                : collapsed
+                  ? 30 / zoom
+                  : 460 / zoom + 30 / zoom
             }}
           >
             <Results
               width={resultTab === 'compare'
                 ? collapsed
-                  ? (window.screen.availHeight / zoom) * 0.03
-                  : window.screen.availWidth / zoom -
-                  (window.screen.availHeight / zoom) * 0.48
+                  ? 30 / zoom
+                  : window.innerWidth - 10 - 60 / zoom - 400 / zoom
                 : collapsed
-                  ? (window.screen.availHeight / zoom) * 0.03
-                  : (window.screen.availHeight / zoom) * 0.48}
+                  ? 30 / zoom
+                  : 460 / zoom + 30 / zoom}
+              // width={resultTab === 'compare'
+              //   ? collapsed
+              //     ? (window.screen.availHeight / zoom) * 0.03
+              //     : window.screen.availWidth / zoom -
+              //     (window.screen.availHeight / zoom) * 0.48
+              //   : collapsed
+              //     ? (window.screen.availHeight / zoom) * 0.03
+              //     : (window.screen.availHeight / zoom) * 0.48}
               state={state}
               bounds={bounds}
               collapsed={collapsed}

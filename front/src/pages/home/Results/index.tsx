@@ -91,11 +91,11 @@ const Results: FC<ResultsProps> = ({
   const handleChange = (event, newValue) => onResultTab(newValue);
 
   return (
-    <div className={classes.root} style={{ height: '100%'}}>
+    <div className={classes.root} style={{ height: window.innerHeight - 60}}>
       <Box
         className={clsx(classes.selected, collapsed && classes.hide)}
         style={{
-          width: width - (window.screen.availHeight / zoom) * 0.03,
+          width: width - 30,
           overflowX: 'hidden'
         }}
       >
@@ -107,7 +107,7 @@ const Results: FC<ResultsProps> = ({
         />
         <Analytics
           state={state}
-          parentWidth={width - (window.screen.availHeight / zoom) * 0.03}
+          parentWidth={width - 30}
           onState={onState}
           visible={resultTab === 'analytics' && !collapsed}
         />
@@ -131,7 +131,7 @@ const Results: FC<ResultsProps> = ({
         value={resultTab}
         onChange={handleChange}
         className={classes.tabs}
-        style={{ width: (window.screen.availHeight / zoom) * 0.03 }}
+        style={{ width: 30 }}
         TabIndicatorProps={{ className: classes.indicator }}
       >
         {tabs.map((tab) => (
@@ -169,7 +169,8 @@ const Results: FC<ResultsProps> = ({
             value={tab.name}
             className={classes.tab}
             style={{
-              height: (window.screen.availHeight / zoom) * 0.215
+              height: (window.innerHeight - 60) / tabs.length
+              // height: (window.screen.availHeight / zoom) * 0.215
             }}
             // disabled={tab.name !== 'network' && !state.isDataLoaded}
           />

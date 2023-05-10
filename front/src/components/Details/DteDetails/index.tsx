@@ -23,6 +23,8 @@ import { Detail, Master } from 'src/types/details';
 import EngineerModal from '../EngineerModal';
 import Manager from './Manager';
 import type { Theme } from 'src/theme';
+import LinksBuilder from './LinksBuilder';
+import LinksList from './LinksList';
 
 interface DteDetailsProps {
   id: number;
@@ -169,6 +171,8 @@ const DteDetails: FC<DteDetailsProps> = ({ id, onClose }) => {
         >
           <Tab value={1} label="Details" />
           <Tab value={2} label="Engineering Model" />
+          <Tab value={3} label="Communication Links Builder" />
+          <Tab value={4} label="Communication Links List" />
         </Tabs>
         <Box className={classes.container}>
           <CssBaseline />
@@ -184,6 +188,12 @@ const DteDetails: FC<DteDetailsProps> = ({ id, onClose }) => {
               )}
               {currentTab === 2 && (
                 <EngineerModal networkId={id} networkName={title} />
+              )}
+              {currentTab === 3 && (
+                <LinksBuilder networkId={id} />
+              )}
+              {currentTab === 4 && (
+                <LinksList networkId={id} />
               )}
             </CardContent>
           </Card>
